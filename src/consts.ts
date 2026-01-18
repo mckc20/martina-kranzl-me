@@ -38,8 +38,4 @@ export const WebsiteLinks = [
 		name: 'Blog',
 		url: 'blog',
 	},
-	{
-		name: 'About',
-		url: 'about',
-	},
 ]
