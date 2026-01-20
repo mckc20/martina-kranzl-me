@@ -1,7 +1,7 @@
 ---
 title: "Sonnenuntergang im Weingarten"
 pubDate: 2024-10-20T11:33:00+02:00
-draft: false
+draft: true
 tags: ["sonnenuntergang"]
 categories: ["Fotos"]
 featured_image: "/images/cover.jpg"

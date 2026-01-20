@@ -1,7 +1,7 @@
 ---
 title: "Weihnachtsbaum"
 pubDate: 2024-12-24T11:33:00+02:00
-draft: false
+draft: true
 tags: ["fotos"]
 categories: ["Fotos"]
 description: "Weihnachten 2025, Spanien"

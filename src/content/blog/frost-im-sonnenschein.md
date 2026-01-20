@@ -1,7 +1,7 @@
 ---
 title: "Frost im Sonnenschein"
 pubDate: 2025-02-01T11:33:00+02:00
-draft: false
+draft: true
 tags: ["fotos"]
 categories: ["Fotos"]
 description: "Michelberg"

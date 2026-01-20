@@ -1,7 +1,7 @@
 ---
 title: "Ringelblume"
 pubDate: 2024-10-29T11:33:00+02:00
-draft: false
+draft: true
 tags: ["blumen", "fotos"]
 categories: ["Fotos"]
 description: "aus Omas Garten"
