@@ -6,6 +6,7 @@ import BlogCard from '../components/BlogCard.astro'
 import { getCollection } from 'astro:content'
 
 const posts = (await getCollection('blog'))
+	.filter(({ data }) => !data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 16)
 ---
@@ -23,18 +24,21 @@ const posts = (await getCollection('blog'))
 		</p>
 	</main>
 
-	<!-- Recent Posts Section -->
-	<section class="app-container">
-		<h2 class="section-title">Recent Posts</h2>
-		<div class="posts-grid-container">
-			{posts.map((post) => <BlogCard post={post} />)}
-		</div>
-		<a class="btn-secondary" href={`${SITE_BASE}/blog`}
-			>Read All
-			<Icon size={20} name="mdi:arrow-right" />
-		</a>
-	</section>
-
+	{ 
+		posts.length > 0 && (
+			<!-- Recent Posts Section -->
+			<section class="app-container">
+				<h2 class="section-title">Recent Posts</h2>
+				<div class="posts-grid-container">
+					{posts.map((post) => <BlogCard post={post} />)}
+				</div>
+				<a class="btn-secondary" href={`${SITE_BASE}/blog`}
+					>Read All
+					<Icon size={20} name="mdi:arrow-right" />
+				</a>
+			</section>
+		)
+	}
 	<br/>
 	<br/>
 </BaseLayout>

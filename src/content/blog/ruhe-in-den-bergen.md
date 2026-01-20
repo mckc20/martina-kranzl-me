@@ -1,7 +1,7 @@
 ---
 title: "Ruhe in den Bergen"
 pubDate: 2025-03-01T11:33:00+02:00
-draft: false
+draft: true
 tags: ["zeichnen", "landschaft"]
 categories: ["Zeichnen"]
 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
