@@ -1,0 +1,54 @@
+---
+import { slugifyStr } from "@/utils/slugify";
+import type { CollectionEntry } from "astro:content";
+import { getPath } from "@/utils/getPath";
+import { Image } from "astro:assets";
+
+export interface Props extends CollectionEntry<"blog"> {}
+
+const { data, id, filePath } = Astro.props;
+const { title, ogImage } = data;
+
+const postUrl = getPath(id, filePath);
+
+// Handle ogImage which can be ImageMetadata or string
+const imageSrc = typeof ogImage === "string" ? ogImage : ogImage;
+---
+
+<a
+  href={postUrl}
+  class="group relative block aspect-square overflow-hidden bg-skin-card"
+>
+  {
+    imageSrc && typeof imageSrc !== "string" ? (
+      <Image
+        src={imageSrc}
+        alt={title}
+        class="h-full w-full object-cover aspect-square transition-transform duration-300 group-hover:scale-105"
+        widths={[320, 640]}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      />
+    ) : imageSrc ? (
+      <img
+        src={imageSrc}
+        alt={title}
+        class="h-full w-full object-cover aspect-square transition-transform duration-300 group-hover:scale-105"
+        loading="lazy"
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center bg-skin-card-muted">
+        <span class="text-skin-base opacity-50">No image</span>
+      </div>
+    )
+  }
+  <div
+    class="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+  >
+    <h3
+      class="p-4 text-sm font-medium text-white"
+      style={{ viewTransitionName: slugifyStr(title) }}
+    >
+      {title}
+    </h3>
+  </div>
+</a>

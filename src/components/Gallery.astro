@@ -1,0 +1,138 @@
+---
+import { Image } from "astro:assets";
+
+export interface Props {
+  images: ImageMetadata[];
+  captions?: Record<string, string>;
+  layout?: "grid" | "masonry";
+  columns?: number;
+}
+
+const { images, captions = {}, layout = "grid", columns = 3 } = Astro.props;
+
+function getFilename(src: string): string {
+  return src.split("/").pop()?.replace(/\?.*$/, "") ?? "";
+}
+---
+
+<div
+  class="gallery-wrapper not-prose -mx-4 sm:-mx-8 md:-mx-16"
+  data-gallery
+>
+  {
+    layout === "grid" ? (
+      <div
+        class="grid grid-cols-2 gap-1"
+        style={`--gallery-cols: ${columns}`}
+      >
+        {images.map(img => {
+          const filename = getFilename(img.src);
+          const caption = captions[filename];
+          return (
+            <a
+              href={img.src}
+              data-pswp-width={img.width}
+              data-pswp-height={img.height}
+              data-cropped="true"
+              class="block overflow-hidden"
+              style={`grid-column: span 1`}
+              {...(caption ? { "data-caption": caption } : {})}
+            >
+              <Image
+                src={img}
+                alt={caption ?? ""}
+                class="!m-0 !border-0 h-full w-full object-cover aspect-square"
+                widths={[320, 640, 960]}
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
+              />
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <div
+        class="gallery-masonry gap-1"
+        style={`columns: ${columns}; column-gap: 0.25rem;`}
+      >
+        {images.map(img => {
+          const filename = getFilename(img.src);
+          const caption = captions[filename];
+          return (
+            <a
+              href={img.src}
+              data-pswp-width={img.width}
+              data-pswp-height={img.height}
+              class="mb-1 block break-inside-avoid overflow-hidden"
+              {...(caption ? { "data-caption": caption } : {})}
+            >
+              <Image
+                src={img}
+                alt={caption ?? ""}
+                class="!m-0 !border-0 w-full"
+                widths={[320, 640, 960]}
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
+              />
+            </a>
+          );
+        })}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(var(--gallery-cols), 1fr);
+    }
+  }
+</style>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
+
+  function initGalleries() {
+    document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(gallery => {
+      if (gallery.dataset.pswpInit) return;
+      gallery.dataset.pswpInit = "true";
+
+      const lightbox = new PhotoSwipeLightbox({
+        gallery,
+        children: "a[data-pswp-width]",
+        pswpModule: () => import("photoswipe"),
+      });
+
+      lightbox.on("uiRegister", () => {
+        lightbox.pswp?.ui?.registerElement({
+          name: "caption",
+          order: 9,
+          isButton: false,
+          appendTo: "root",
+          html: "",
+          onInit: (el) => {
+            el.style.cssText =
+              "position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,.5));color:#fff;font-size:14px;text-align:center;pointer-events:none;";
+
+            lightbox.pswp?.on("change", () => {
+              const caption =
+                lightbox.pswp?.currSlide?.data.element?.getAttribute(
+                  "data-caption"
+                ) ?? "";
+              el.textContent = caption;
+              el.style.display = caption ? "block" : "none";
+            });
+          },
+        });
+      });
+
+      lightbox.init();
+    });
+  }
+
+  // Init on first load
+  initGalleries();
+
+  // Re-init after view transitions
+  document.addEventListener("astro:after-swap", initGalleries);
+</script>

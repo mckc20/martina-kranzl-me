@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from "astro:content";
+import PhotoblogCard from "./PhotoblogCard.astro";
+
+export interface Props {
+  posts: CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+---
+
+<div class="grid grid-cols-2 gap-1 sm:grid-cols-3">
+  {posts.map((post, index) => {
+    const isLast = index === posts.length - 1;
+    const hideOnMobile = isLast && posts.length % 2 !== 0;
+    return (
+      <div class:list={[{ "hidden sm:block": hideOnMobile }]}>
+        <PhotoblogCard {...post} />
+      </div>
+    );
+  })}
+</div>
