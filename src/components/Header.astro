@@ -8,7 +8,6 @@ import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
-import IconRss from "@/assets/icons/IconRss.svg";
 
 const { pathname } = Astro.url;
 
@@ -75,14 +74,6 @@ const isActive = (path: string) => {
             </a>
           </li>
           <li class="col-span-2">
-            <a
-              href="/tags/talks"
-              class:list={{ "active-nav": isActive("/tags/talks") }}
-            >
-              Talks
-            </a>
-          </li>
-          <li class="col-span-2">
             <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
               Tags
             </a>
@@ -119,16 +110,6 @@ const isActive = (path: string) => {
             >
               <IconSearch />
               <span class="sr-only">Search</span>
-            </LinkButton>
-          </li>
-          <li class="col-span-1 flex items-center justify-center">
-            <LinkButton
-              href="/rss.xml"
-              ariaLabel="rss"
-              title="RSS Feed"
-            >
-              <IconRss />
-              <span class="sr-only">RSS Feed</span>
             </LinkButton>
           </li>
           {
