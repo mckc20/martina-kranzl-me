@@ -18,10 +18,10 @@ const posts = await getCollection("blog");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(
-  ({ data }) => !data.featured && !data.tags.includes("photoblog")
+  ({ data }) => !data.featured && !data.tags.includes("fotoblog")
 );
 const photoblogPosts = sortedPosts.filter(({ data }) =>
-  data.tags.includes("photoblog")
+  data.tags.includes("fotoblog")
 );
 ---
 
@@ -68,7 +68,7 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
             <h2 class="mb-6 text-2xl font-semibold tracking-wide">Photoblog</h2>
             <PhotoblogGrid posts={photoblogPosts.slice(0, SITE.photoblogPostsPerIndex)} />
             <div class="my-8 text-center">
-              <LinkButton href="/tags/photoblog/">
+              <LinkButton href="/tags/fotoblog/">
                 All Photos
                 <IconArrowRight class="inline-block rtl:-rotate-180" />
               </LinkButton>

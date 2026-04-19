@@ -18,7 +18,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
   return tags.flatMap(({ tag, tagName }) => {
     const tagPosts = getPostsByTag(posts, tag);
-    const isPhotoblog = tag === "photoblog" || tag === "photography";
+    const isPhotoblog = tag === "fotoblog" || tag === "fotographie";
 
     return paginate(tagPosts, {
       params: { tag },
@@ -32,7 +32,7 @@ const params = Astro.params;
 const { tag } = params;
 const { page, tagName } = Astro.props;
 
-const isPhotoblogTag = tag === "photoblog" || tag === "photography";
+const isPhotoblogTag = tag === "fotoblog" || tag === "fotographie";
 ---
 
 <Layout title={`Tag: ${tagName} | ${SITE.title}`}>
