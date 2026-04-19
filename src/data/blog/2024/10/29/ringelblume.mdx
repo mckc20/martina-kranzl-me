@@ -2,8 +2,17 @@
 title: "Ringelblume"
 pubDatetime: 2024-10-29T11:33:00+02:00
 description: "aus Omas Garten"
-tags: ["blumen", "fotos"]
-ogImage: "../../../../../assets/blogimages/ringelblume/cover.jpg"
+tags:
+  - blumen
+  - fotos
+ogImage: "@/assets/blogimages/ringelblume/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/ringelblume/cover.jpg";
+
+<figure>
+  <Image src={image1} alt="Ringelblume" />
+</figure>
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

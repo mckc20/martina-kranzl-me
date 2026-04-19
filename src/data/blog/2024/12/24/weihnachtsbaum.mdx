@@ -2,16 +2,33 @@
 title: "Weihnachtsbaum"
 pubDatetime: 2024-12-24T11:33:00+02:00
 description: "Weihnachten 2025, Spanien"
-tags: ["fotos"]
-ogImage: "../../../../../assets/blogimages/weihnachtsbaum/cover.jpg"
+tags:
+  - fotos
+ogImage: "@/assets/blogimages/weihnachtsbaum/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/weihnachtsbaum/cover.jpg";
+import image2 from "@/assets/blogimages/weihnachtsbaum/christmas-tree-spain.jpg";
+import image3 from "@/assets/blogimages/weihnachtsbaum/red-christmas-ball.jpg";
+import image4 from "@/assets/blogimages/weihnachtsbaum/tree-christmas-ball.jpg";
+
+<figure>
+  <Image src={image1} alt="Weihnachtsbaum" />
+</figure>
 
 Wir feiern Weihnachten abwechselnd in Spanien und in Österreich.
 Dort haben wir eigentlich keinen richtigen Weihnachtsbaum. Aber wir schmücken
 jedes Mal einen Baum, der draußen steht. ⭐️⭐️
 
-![Weihnachtsbaum](../../../../../assets/blogimages/weihnachtsbaum/christmas-tree-spain.jpg)
+<figure>
+  <Image src={image2} alt="Weihnachtsbaum" />
+</figure>
 
-![Rote Kugel](../../../../../assets/blogimages/weihnachtsbaum/red-christmas-ball.jpg)
+<figure>
+  <Image src={image3} alt="Weihnachtsbaum" />
+</figure>
 
-![Weihnachtsbaum Kugel](../../../../../assets/blogimages/weihnachtsbaum/tree-christmas-ball.jpg)
+<figure>
+  <Image src={image4} alt="Weihnachtsbaum" />
+</figure>

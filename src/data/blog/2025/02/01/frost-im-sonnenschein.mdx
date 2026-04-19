@@ -2,8 +2,16 @@
 title: "Frost im Sonnenschein"
 pubDatetime: 2025-02-01T11:33:00+02:00
 description: "Michelberg"
-tags: ["fotos"]
-ogImage: "../../../../../assets/blogimages/frost-im-sonnenschein/cover.jpg"
+tags:
+  - fotos
+ogImage: "@/assets/blogimages/frost-im-sonnenschein/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/frost-im-sonnenschein/cover.jpg";
+
+<figure>
+  <Image src={image1} alt="Frost im Sonnenschein" />
+</figure>
 
 Ab und zu fahren wir zu Michelberg und machen ein kleine Wanderung zur Kapelle oben am Berg. Als wir wieder mal dort waren, war es und noch früher Vormittag und deswegen war auf einem Eichenblatt noch Frost. Die Sonne hat geschienen und deswegen glitzerte das Blatt voll schön. ✨✨

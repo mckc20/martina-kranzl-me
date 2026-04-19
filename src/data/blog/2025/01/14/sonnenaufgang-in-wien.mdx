@@ -2,8 +2,17 @@
 title: "Sonnenaufgang in Wien"
 pubDatetime: 2025-01-14T11:33:00+02:00
 description: "Wien, Döbling"
-tags: ["sonnenaufgang", "landschaft"]
-ogImage: "../../../../../assets/blogimages/sonnenaufgang-in-wien/cover.jpg"
+tags:
+  - sonnenaufgang
+  - landschaft
+ogImage: "@/assets/blogimages/sonnenaufgang-in-wien/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/sonnenaufgang-in-wien/cover.jpg";
+
+<figure>
+  <Image src={image1} alt="Sonnenaufgang in Wien" />
+</figure>
 
 Auf den Weg zur Schule im Winter habe ich oft den Sonnenaufgang gesehen. Das ist eine der Schachen, die ich am Winter mag und das es in der Früh oft noch dunkel ist. Man kann dann sehr schön die Sonne aufgehen sehen.

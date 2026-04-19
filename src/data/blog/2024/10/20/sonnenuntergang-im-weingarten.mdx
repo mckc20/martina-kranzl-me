@@ -2,12 +2,23 @@
 title: "Sonnenuntergang im Weingarten"
 pubDatetime: 2024-10-20T11:33:00+02:00
 description: "Hungerberg, Wien"
-tags: ["sonnenuntergang"]
-ogImage: "../../../../../assets/blogimages/sonnenuntergang-im-weingarten/cover.jpg"
+tags:
+  - sonnenuntergang
+ogImage: "@/assets/blogimages/sonnenuntergang-im-weingarten/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/sonnenuntergang-im-weingarten/cover.jpg";
+import image2 from "@/assets/blogimages/sonnenuntergang-im-weingarten/weingarten-sonnenuntergang.jpg";
+
+<figure>
+  <Image src={image1} alt="Sonnenuntergang im Weingarten" />
+</figure>
 
 Meine Familie und ich gehen an machen Nachmittagen auf den Hungerberg, um ein bisschen an die frische Luft zu kommen. Dort gibt es eine schöne Aussicht auf Wien und wir sehen auch oft den Sonnenuntergang.
 
 Siehe auch [Hagebutte im Weingarten](/blog/hagebutte/)
 
-![Weingarten](../../../../../assets/blogimages/sonnenuntergang-im-weingarten/weingarten-sonnenuntergang.jpg)
+<figure>
+  <Image src={image2} alt="Sonnenuntergang im Weingarten" />
+</figure>

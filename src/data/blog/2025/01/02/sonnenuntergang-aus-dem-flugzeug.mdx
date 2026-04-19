@@ -2,8 +2,16 @@
 title: "Sonnenuntergang aus dem Flugzeug"
 pubDatetime: 2025-01-02T11:33:00+02:00
 description: "Rückflug nach Wien, Winterferien"
-tags: ["sonnenuntergang"]
-ogImage: "../../../../../assets/blogimages/sonnenuntergang-aus-dem-flugzeug/cover.jpg"
+tags:
+  - sonnenuntergang
+ogImage: "@/assets/blogimages/sonnenuntergang-aus-dem-flugzeug/cover.jpg"
 ---
+
+import { Image } from "astro:assets";
+import image1 from "@/assets/blogimages/sonnenuntergang-aus-dem-flugzeug/cover.jpg";
+
+<figure>
+  <Image src={image1} alt="Sonnenuntergang aus dem Flugzeug" />
+</figure>
 
 Das ist eines meiner Lieblingsfotos! ♥️
