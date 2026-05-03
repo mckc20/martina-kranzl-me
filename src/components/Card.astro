@@ -29,19 +29,14 @@ const image = thumbnail ?? heroImage ?? ogImage;
 const headerProps = {
   style: { viewTransitionName: slugifyStr(title) },
   class:
-    "text-2xl font-normal leading-snug decoration-dashed underline-offset-4 group-hover:underline",
+    "text-[1.45rem] font-normal leading-snug decoration-dashed underline-offset-4 group-hover:underline sm:text-2xl",
 };
 ---
 
 <li class="border-b border-border/70 py-8 first:pt-0 last:border-b-0">
   <article class="group grid gap-5 sm:grid-cols-[minmax(0,1fr)_10rem] sm:gap-8">
     <div class="min-w-0">
-      <Datetime
-        {pubDatetime}
-        {modDatetime}
-        {timezone}
-        class="mb-2 text-text-subtle"
-      />
+      <Datetime {pubDatetime} {modDatetime} {timezone} class="mb-2" />
       <a
         href={postUrl}
         class="inline-block text-foreground focus-visible:no-underline focus-visible:underline-offset-0"

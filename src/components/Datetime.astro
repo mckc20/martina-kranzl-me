@@ -1,11 +1,5 @@
 ---
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import { SITE } from "@/config";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import { formatGermanDate } from "@/utils/formatDate";
 
 export interface Props {
   class?: string;
@@ -24,25 +18,32 @@ const {
 } = Astro.props;
 
 /* ========== Formatted Datetime ========== */
-const isModified = modDatetime && modDatetime > pubDatetime;
+const pubDate = new Date(pubDatetime);
+const modDate = modDatetime ? new Date(modDatetime) : null;
+const isModified = modDate && modDate.getTime() > pubDate.getTime();
+const datetime = isModified ? modDate : pubDate;
 
-const datetime = dayjs(isModified ? modDatetime : pubDatetime).tz(
-  postTimezone || SITE.timezone
-);
-
-const date = datetime.format("D MMM, YYYY"); // e.g., '22 Mar, 2025'
+const date = formatGermanDate(datetime, postTimezone);
 ---
 
-<div class:list={["flex items-center opacity-80", className]}>
+<div class:list={["flex items-center gap-1", className]}>
   {
     isModified && (
-      <span class:list={["text-lg", { "sm:text-xl": size === "lg" }]}>
-        Updated:
+      <span
+        class:list={[
+          "font-sans text-base tracking-wide text-text-subtle italic",
+          { "sm:text-lg": size === "lg" },
+        ]}
+      >
+        Aktualisiert:
       </span>
     )
   }
   <time
-    class:list={["text-lg", { "sm:text-xl": size === "lg" }]}
+    class:list={[
+      "font-sans text-base tracking-wide text-text-subtle italic",
+      { "sm:text-lg": size === "lg" },
+    ]}
     datetime={datetime.toISOString()}>{date}</time
   >
 </div>
