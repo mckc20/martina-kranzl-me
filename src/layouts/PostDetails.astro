@@ -123,7 +123,7 @@ const nextPost =
     }
     <time
       datetime={pubDatetime.toISOString()}
-      class="mb-2 block text-base text-text-subtle"
+      class="mb-2 block text-lg text-text-subtle"
     >
       {postDate}
     </time>
@@ -136,7 +136,11 @@ const nextPost =
     <ul class="">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
     </ul>
-    {SITE.editPost.enabled && <EditPost {hideEditPost} {post} class="mt-2 max-sm:hidden" />}
+    {
+      SITE.editPost.enabled && (
+        <EditPost {hideEditPost} {post} class="mt-2 max-sm:hidden" />
+      )
+    }
     <article
       id="article"
       class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
