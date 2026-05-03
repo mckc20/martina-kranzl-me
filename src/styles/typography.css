@@ -101,6 +101,25 @@
       @apply border-s-accent/80 break-words opacity-80;
     }
 
+    &#article blockquote {
+      @apply relative my-8 border-0 bg-transparent py-1 ps-8 pe-0 font-normal not-italic text-foreground opacity-100 shadow-none;
+      quotes: none;
+    }
+
+    &#article blockquote::before {
+      content: "\201c";
+      @apply absolute top-0 start-0 font-serif text-4xl leading-none font-bold not-italic text-accent-highlight;
+    }
+
+    &#article blockquote::after {
+      content: "";
+      @apply absolute start-2 top-10 bottom-1 w-px bg-accent-highlight;
+    }
+
+    &#article blockquote p {
+      @apply my-0 font-normal not-italic text-foreground before:content-none after:content-none;
+    }
+
     details {
       @apply inline-block cursor-pointer text-foreground select-none [&_p]:hidden [&_ul]:!my-0;
     }
