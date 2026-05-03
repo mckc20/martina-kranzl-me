@@ -1,10 +1,10 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
-import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
@@ -32,10 +32,19 @@ const {
   modDatetime,
   timezone,
   tags,
+  heroImage,
+  heroImageAlt,
   hideEditPost,
 } = post.data;
 
 const { Content } = await render(post);
+
+const postDate = new Intl.DateTimeFormat("de-AT", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: timezone || SITE.timezone,
+}).format(pubDatetime);
 
 let ogImageUrl: string | undefined;
 
@@ -93,26 +102,41 @@ const nextPost =
     ]}
     data-pagefind-body
   >
+    {
+      heroImage &&
+        (typeof heroImage === "string" ? (
+          <img
+            src={heroImage}
+            alt={heroImageAlt ?? ""}
+            class="relative left-1/2 mb-8 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+            loading="eager"
+          />
+        ) : (
+          <Image
+            src={heroImage}
+            alt={heroImageAlt ?? ""}
+            class="relative left-1/2 mb-8 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+            widths={[640, 960, 1280, 1600, 1920]}
+            sizes="100vw"
+          />
+        ))
+    }
+    <time
+      datetime={pubDatetime.toISOString()}
+      class="mb-2 block text-base text-text-subtle"
+    >
+      {postDate}
+    </time>
     <h1
       transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-normal text-accent sm:text-3xl"
+      class="inline-block text-2xl font-normal text-foreground sm:text-3xl"
     >
       {title}
     </h1>
     <ul class="">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
     </ul>
-    <div class="my-2 flex items-center gap-2">
-      <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
-      <span
-        aria-hidden="true"
-        class:list={[
-          "max-sm:hidden",
-          { hidden: !SITE.editPost.enabled || hideEditPost },
-        ]}>|</span
-      >
-      <EditPost {hideEditPost} {post} class="max-sm:hidden" />
-    </div>
+    {SITE.editPost.enabled && <EditPost {hideEditPost} {post} class="mt-2 max-sm:hidden" />}
     <article
       id="article"
       class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
