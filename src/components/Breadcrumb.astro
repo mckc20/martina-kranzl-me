@@ -6,10 +6,14 @@ const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 // eg: /tags/tailwindcss => ['tags', 'tailwindcss']
 const breadcrumbList = currentUrlPath.split("/").slice(1);
 
-// if breadcrumb is Home > Posts > 1 <etc>
-// replace Posts with Posts (page number)
-if (breadcrumbList[0] === "posts") {
-  breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
+// Keep the first posts page as Home > Posts. For paginated list pages,
+// only show a page number when the URL actually contains one.
+if (breadcrumbList[0] === "posts" && !breadcrumbList[1]) {
+  breadcrumbList.splice(0, 1, "Posts");
+}
+
+if (breadcrumbList[0] === "posts" && !isNaN(Number(breadcrumbList[1]))) {
+  breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1]})`);
 }
 
 // if breadcrumb is Home > Tags > [tag] > [page] <etc>

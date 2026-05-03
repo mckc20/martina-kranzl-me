@@ -15,6 +15,7 @@ const blog = defineCollection({
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
+      thumbnail: image().or(z.string()).optional(),
       ogImage: image().or(z.string()).optional(),
       heroImage: image().or(z.string()).optional(),
       heroImageAlt: z.string().optional(),

@@ -3,6 +3,7 @@ import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
+import { Image } from "astro:assets";
 
 export interface Props extends CollectionEntry<"blog"> {
   variant?: "h2" | "h3";
@@ -10,32 +11,91 @@ export interface Props extends CollectionEntry<"blog"> {
 
 const { variant = "h2", data, id, filePath } = Astro.props;
 
-const { title, description, pubDatetime, modDatetime, timezone, tags } = data;
+const {
+  title,
+  description,
+  pubDatetime,
+  modDatetime,
+  timezone,
+  tags,
+  thumbnail,
+  heroImage,
+  ogImage,
+} = data;
+
+const postUrl = getPath(id, filePath);
+const image = thumbnail ?? heroImage ?? ogImage;
 
 const headerProps = {
   style: { viewTransitionName: slugifyStr(title) },
-  class: "text-lg font-normal decoration-dashed hover:underline",
+  class:
+    "text-2xl font-normal leading-snug decoration-dashed underline-offset-4 group-hover:underline",
 };
 ---
 
-<li class="my-6">
-  <a
-    href={getPath(id, filePath)}
-    class="inline-block text-xl font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
-  >
+<li class="border-b border-border/70 py-8 first:pt-0 last:border-b-0">
+  <article class="group grid gap-5 sm:grid-cols-[minmax(0,1fr)_10rem] sm:gap-8">
+    <div class="min-w-0">
+      <Datetime
+        {pubDatetime}
+        {modDatetime}
+        {timezone}
+        class="mb-2 text-text-subtle"
+      />
+      <a
+        href={postUrl}
+        class="inline-block text-foreground focus-visible:no-underline focus-visible:underline-offset-0"
+      >
+        {
+          variant === "h2" ? (
+            <h2 {...headerProps}>{title}</h2>
+          ) : (
+            <h3 {...headerProps}>{title}</h3>
+          )
+        }
+      </a>
+      {
+        description && (
+          <p class="mt-3 leading-relaxed text-foreground/85">{description}</p>
+        )
+      }
+    </div>
     {
-      variant === "h2" ? (
-        <h2 {...headerProps}>{title}</h2>
-      ) : (
-        <h3 {...headerProps}>{title}</h3>
-      )
+      image && typeof image !== "string" ? (
+        <a
+          href={postUrl}
+          class="post-card-thumbnail relative block aspect-[4/3] overflow-hidden bg-muted sm:mt-8"
+          aria-label={title}
+        >
+          <Image
+            src={image}
+            alt={title}
+            class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            style={{ objectPosition: "50% 50%" }}
+            widths={[240, 480, 720]}
+            sizes="(max-width: 640px) 100vw, 10rem"
+          />
+        </a>
+      ) : image ? (
+        <a
+          href={postUrl}
+          class="post-card-thumbnail relative block aspect-[4/3] overflow-hidden bg-muted sm:mt-8"
+          aria-label={title}
+        >
+          <img
+            src={image}
+            alt={title}
+            class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            style={{ objectPosition: "50% 50%" }}
+            loading="lazy"
+          />
+        </a>
+      ) : null
     }
-  </a>
-  <Datetime {pubDatetime} {modDatetime} {timezone} />
-  <p>{description}</p>
+  </article>
   {
     tags && tags.length > 0 && (
-      <div class="mt-1 flex flex-wrap gap-x-2 text-sm text-gray-500 dark:text-gray-400">
+      <div class="mt-4 flex flex-wrap gap-x-2 text-sm text-foreground/60">
         {tags.map(tag => (
           <a href={`/tags/${slugifyStr(tag)}/`} class="hover:text-accent">
             #{tag}
@@ -45,3 +105,12 @@ const headerProps = {
     )
   }
 </li>
+
+<style>
+  .post-card-thumbnail :global(img) {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+</style>
