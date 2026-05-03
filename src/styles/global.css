@@ -6,27 +6,36 @@
 
 :root,
 html[data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
-  --muted: #e6e6e6;
-  --border: #ece9e9;
+  --background: #fbf7ef;
+  --foreground: #332d27;
+  --accent: #78917a;
+  --accent-secondary: #b45a5a;
+  --accent-highlight: #c49a4e;
+  --muted: #e8dfd1;
+  --border: #d6c7b2;
+  --text-subtle: #7a6f63;
 }
 
 html[data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --muted: #343f60;
-  --border: #ab4b08;
+  --background: #2f2f2d;
+  --foreground: #ede6d8;
+  --accent: #c49a4e;
+  --accent-secondary: #b45a5a;
+  --accent-highlight: #c49a4e;
+  --muted: #8a7a54;
+  --border: #4a4637;
+  --text-subtle: #d6c7b2;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-highlight: var(--accent-highlight);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-text-subtle: var(--text-subtle);
   --font-sans: "Cormorant Garamond", Georgia, serif;
   --font-serif: "Literata", Georgia, serif;
 }
@@ -41,7 +50,7 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col bg-background font-sans text-xl leading-relaxed text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-sans text-xl leading-relaxed text-foreground selection:bg-accent-secondary/75 selection:text-background;
   }
   h1,
   h2,

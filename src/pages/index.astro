@@ -15,11 +15,23 @@ import { SOCIALS } from "@/constants";
 
 const posts = await getCollection("blog");
 
+const NEW_POST_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(
-  ({ data }) => !data.featured && !data.tags.includes("fotoblog")
+const regularPosts = sortedPosts.filter(
+  ({ data }) => !data.tags.includes("fotoblog")
 );
+const latestRegularPost = [...regularPosts].sort(
+  (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
+)[0];
+const latestRegularPostAge = latestRegularPost
+  ? Date.now() - latestRegularPost.data.pubDatetime.getTime()
+  : Number.POSITIVE_INFINITY;
+const showLatestRegularPost =
+  latestRegularPostAge >= 0 && latestRegularPostAge <= NEW_POST_WINDOW_MS;
+const remainingRegularPosts = showLatestRegularPost
+  ? regularPosts.filter(post => post.id !== latestRegularPost.id)
+  : regularPosts;
 const photoblogPosts = sortedPosts.filter(({ data }) =>
   data.tags.includes("fotoblog")
 );
@@ -47,17 +59,17 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
     <Hr />
 
     {
-      featuredPosts.length > 0 && (
+      showLatestRegularPost && latestRegularPost && (
         <>
-          <section id="featured" class="pt-12 pb-6">
-            <h2 class="text-2xl font-normal tracking-wide">Featured</h2>
+          <section id="latest-post" class="pt-12 pb-6">
+            <h2 class="text-2xl font-normal tracking-wide">Latest Post</h2>
             <ul>
-              {featuredPosts.map(data => (
-                <Card variant="h3" {...data} />
-              ))}
+              <Card variant="h3" {...latestRegularPost} />
             </ul>
           </section>
-          {(photoblogPosts.length > 0 || recentPosts.length > 0) && <Hr />}
+          {(photoblogPosts.length > 0 || remainingRegularPosts.length > 0) && (
+            <Hr />
+          )}
         </>
       )
     }
@@ -77,17 +89,17 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
               </LinkButton>
             </div>
           </section>
-          {recentPosts.length > 0 && <Hr />}
+          {remainingRegularPosts.length > 0 && <Hr />}
         </>
       )
     }
 
     {
-      recentPosts.length > 0 && (
+      remainingRegularPosts.length > 0 && (
         <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-normal tracking-wide">Previous Posts</h2>
+          <h2 class="text-2xl font-normal tracking-wide">Posts</h2>
           <ul>
-            {recentPosts.map(
+            {remainingRegularPosts.map(
               (data, index) =>
                 index < SITE.postPerIndex && <Card variant="h3" {...data} />
             )}
