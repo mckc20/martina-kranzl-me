@@ -17,7 +17,7 @@ const imageSrc = typeof ogImage === "string" ? ogImage : ogImage;
 
 <a
   href={postUrl}
-  class="group bg-skin-card relative block aspect-square overflow-hidden"
+  class="group relative block aspect-square overflow-hidden bg-muted"
 >
   {
     imageSrc && typeof imageSrc !== "string" ? (
@@ -36,8 +36,8 @@ const imageSrc = typeof ogImage === "string" ? ogImage : ogImage;
         loading="lazy"
       />
     ) : (
-      <div class="bg-skin-card-muted flex h-full w-full items-center justify-center">
-        <span class="text-skin-base opacity-50">No image</span>
+      <div class="flex h-full w-full items-center justify-center bg-muted">
+        <span class="text-foreground opacity-50">No image</span>
       </div>
     )
   }
