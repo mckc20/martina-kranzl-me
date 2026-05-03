@@ -14,14 +14,14 @@ const { title, description, pubDatetime, modDatetime, timezone, tags } = data;
 
 const headerProps = {
   style: { viewTransitionName: slugifyStr(title) },
-  class: "text-lg font-medium decoration-dashed hover:underline",
+  class: "text-lg font-normal decoration-dashed hover:underline",
 };
 ---
 
 <li class="my-6">
   <a
     href={getPath(id, filePath)}
-    class="inline-block text-lg font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+    class="inline-block text-xl font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
   >
     {
       variant === "h2" ? (
@@ -35,12 +35,9 @@ const headerProps = {
   <p>{description}</p>
   {
     tags && tags.length > 0 && (
-      <div class="mt-1 flex flex-wrap gap-x-2 text-xs text-gray-500 dark:text-gray-400">
+      <div class="mt-1 flex flex-wrap gap-x-2 text-sm text-gray-500 dark:text-gray-400">
         {tags.map(tag => (
-          <a
-            href={`/tags/${slugifyStr(tag)}/`}
-            class="hover:text-accent"
-          >
+          <a href={`/tags/${slugifyStr(tag)}/`} class="hover:text-accent">
             #{tag}
           </a>
         ))}

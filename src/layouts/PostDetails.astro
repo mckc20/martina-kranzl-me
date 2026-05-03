@@ -95,7 +95,7 @@ const nextPost =
   >
     <h1
       transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
+      class="inline-block text-2xl font-normal text-accent sm:text-3xl"
     >
       {title}
     </h1>
@@ -145,7 +145,7 @@ const nextPost =
             <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
             <div>
               <span>Previous Post</span>
-              <div class="text-sm text-accent/85">{prevPost.title}</div>
+              <div class="text-base text-accent/85">{prevPost.title}</div>
             </div>
           </a>
         )
@@ -158,7 +158,7 @@ const nextPost =
           >
             <div>
               <span>Next Post</span>
-              <div class="text-sm text-accent/85">{nextPost.title}</div>
+              <div class="text-base text-accent/85">{nextPost.title}</div>
             </div>
             <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
           </a>

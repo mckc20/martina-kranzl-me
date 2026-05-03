@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Literata:opsz,wght@7..72,400..700&display=swap");
 @import "tailwindcss";
 @import "./typography.css";
 
@@ -26,6 +27,8 @@ html[data-theme="dark"] {
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --font-sans: "Cormorant Garamond", Georgia, serif;
+  --font-serif: "Literata", Georgia, serif;
 }
 
 @layer base {
@@ -38,7 +41,15 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col bg-background font-mono text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-sans text-xl leading-relaxed text-foreground selection:bg-accent/75 selection:text-background;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-normal;
   }
   a,
   button {
