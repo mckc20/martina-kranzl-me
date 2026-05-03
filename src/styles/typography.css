@@ -3,7 +3,7 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose;
+    @apply prose prose-lg;
 
     h1,
     h2,
@@ -13,8 +13,27 @@
       @apply mb-3 text-foreground;
     }
 
+    h1,
+    h2,
+    h3,
+    h4 {
+      @apply font-normal;
+    }
+
+    h1 {
+      @apply text-4xl;
+    }
+
+    h2 {
+      @apply text-2xl;
+    }
+
     h3 {
-      @apply italic;
+      @apply text-xl;
+    }
+
+    h4 {
+      @apply text-lg;
     }
 
     p,

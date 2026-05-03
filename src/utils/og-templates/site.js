@@ -64,6 +64,7 @@ export default async () => {
                       type: "div",
                       props: {
                         style: {
+                          fontFamily: "Cormorant Garamond",
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
@@ -77,7 +78,11 @@ export default async () => {
                           {
                             type: "p",
                             props: {
-                              style: { fontSize: 72, fontWeight: "bold" },
+                              style: {
+                                fontFamily: "Literata",
+                                fontSize: 72,
+                                fontWeight: 400,
+                              },
                               children: SITE.title,
                             },
                           },
@@ -95,6 +100,7 @@ export default async () => {
                       type: "div",
                       props: {
                         style: {
+                          fontFamily: "Cormorant Garamond",
                           display: "flex",
                           justifyContent: "flex-end",
                           width: "100%",

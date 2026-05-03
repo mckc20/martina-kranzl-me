@@ -155,8 +155,9 @@ export default async post => {
                       type: "p",
                       props: {
                         style: {
+                          fontFamily: "Literata",
                           fontSize: 72,
-                          fontWeight: "bold",
+                          fontWeight: 400,
                           maxHeight: "84%",
                           overflow: "hidden",
                         },
@@ -167,6 +168,7 @@ export default async post => {
                       type: "div",
                       props: {
                         style: {
+                          fontFamily: "Cormorant Garamond",
                           display: "flex",
                           justifyContent: "space-between",
                           width: "100%",

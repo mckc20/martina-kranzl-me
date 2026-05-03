@@ -30,7 +30,8 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
   <main id="main-content" data-layout="index">
     <section id="hero" class="pt-8 pb-6">
       <p class="[&_a]:inline-link">
-        Willkommen auf meinem Blog. Hier teile ich Fotos und Zeichnungen aus Wien, von Reisen und aus dem Alltag.
+        Willkommen auf meinem Blog. Hier teile ich Fotos und Zeichnungen aus
+        Wien, von Reisen und aus dem Alltag.
       </p>
       {
         // only display if at least one social link is enabled
@@ -49,7 +50,7 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
       featuredPosts.length > 0 && (
         <>
           <section id="featured" class="pt-12 pb-6">
-            <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+            <h2 class="text-2xl font-normal tracking-wide">Featured</h2>
             <ul>
               {featuredPosts.map(data => (
                 <Card variant="h3" {...data} />
@@ -65,8 +66,10 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
       photoblogPosts.length > 0 && (
         <>
           <section id="photoblog" class="pt-12 pb-6">
-            <h2 class="mb-6 text-2xl font-semibold tracking-wide">Photoblog</h2>
-            <PhotoblogGrid posts={photoblogPosts.slice(0, SITE.photoblogPostsPerIndex)} />
+            <h2 class="mb-6 text-2xl font-normal tracking-wide">Photoblog</h2>
+            <PhotoblogGrid
+              posts={photoblogPosts.slice(0, SITE.photoblogPostsPerIndex)}
+            />
             <div class="my-8 text-center">
               <LinkButton href="/tags/fotoblog/">
                 All Photos
@@ -82,7 +85,7 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
     {
       recentPosts.length > 0 && (
         <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Previous Posts</h2>
+          <h2 class="text-2xl font-normal tracking-wide">Previous Posts</h2>
           <ul>
             {recentPosts.map(
               (data, index) =>
