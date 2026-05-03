@@ -10,6 +10,7 @@ import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import { getPath } from "@/utils/getPath";
+import { formatGermanDate } from "@/utils/formatDate";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
@@ -39,12 +40,7 @@ const {
 
 const { Content } = await render(post);
 
-const postDate = new Intl.DateTimeFormat("de-AT", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: timezone || SITE.timezone,
-}).format(pubDatetime);
+const postDate = formatGermanDate(pubDatetime, timezone);
 
 let ogImageUrl: string | undefined;
 
@@ -123,7 +119,7 @@ const nextPost =
     }
     <time
       datetime={pubDatetime.toISOString()}
-      class="mb-2 block text-lg text-text-subtle"
+      class="mb-2 block font-sans text-xl tracking-wide text-text-subtle italic"
     >
       {postDate}
     </time>
