@@ -1,0 +1,30 @@
+---
+title: "Alles im Blick"
+pubDatetime: 2026-04-26T11:33:00+02:00
+description: ""
+tags:
+  - tiere
+  - fotoblog
+  - fotographie
+ogImage: "src/assets/blogimages/alles-im-blick/cover.jpg"
+---
+import Gallery from '@/components/Gallery.astro';
+import { Image } from "astro:assets";
+import image1 from "src/assets/blogimages/alles-im-blick/cover.jpg";
+
+export const photos = Object.values(
+    import.meta.glob('src/assets/blogimages/alles-im-blick/*.jpg', { eager: true, import: 'default' })
+);
+
+<figure>
+  <Image src={image1} alt="Alles im Blick" />
+  <figcaption class="text-left">
+       *(Foto von Martina Kranzl)*
+    </figcaption>
+</figure>
+
+<hr/>
+
+<Gallery images={photos} />
+
+<hr/>
