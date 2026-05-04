@@ -11,7 +11,7 @@ import {
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
 
-import netlify from "@astrojs/netlify";
+import vercel from "@astrojs/vercel";
 
 import remarkGfm from "remark-gfm";
 
@@ -75,5 +75,5 @@ export default defineConfig({
     preserveScriptOrder: true,
   },
 
-  adapter: netlify(),
+  adapter: vercel({ imageService: true }),
 });
