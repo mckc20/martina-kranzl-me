@@ -28,3 +28,6 @@ pnpm-debug.log*
 public/pagefind
 # Local Netlify folder
 .netlify
+
+# Local Vercel build/deploy output
+.vercel
