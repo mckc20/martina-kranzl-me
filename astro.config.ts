@@ -71,9 +71,5 @@ export default defineConfig({
     },
   },
 
-  experimental: {
-    preserveScriptOrder: true,
-  },
-
   adapter: vercel({ imageService: true }),
 });
