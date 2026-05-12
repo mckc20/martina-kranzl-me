@@ -99,23 +99,31 @@ const nextPost =
     data-pagefind-body
   >
     {
-      heroImage &&
-        (typeof heroImage === "string" ? (
-          <img
-            src={heroImage}
-            alt={heroImageAlt ?? ""}
-            class="relative left-1/2 mb-8 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
-            loading="eager"
-          />
-        ) : (
-          <Image
-            src={heroImage}
-            alt={heroImageAlt ?? ""}
-            class="relative left-1/2 mb-8 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
-            widths={[640, 960, 1280, 1600, 1920]}
-            sizes="100vw"
-          />
-        ))
+      heroImage && (
+        <figure class="mb-8">
+          {typeof heroImage === "string" ? (
+            <img
+              src={heroImage}
+              alt={heroImageAlt ?? ""}
+              class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+              loading="eager"
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt={heroImageAlt ?? ""}
+              class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+              widths={[640, 960, 1280, 1600, 1920]}
+              sizes="100vw"
+            />
+          )}
+          {heroImageAlt && (
+            <figcaption class="mt-2 text-sm text-text-subtle italic">
+              {heroImageAlt}
+            </figcaption>
+          )}
+        </figure>
+      )
     }
     <time
       datetime={pubDatetime.toISOString()}
