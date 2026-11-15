@@ -1,163 +1,291 @@
 ---
-import Hr from "./Hr.astro";
-import IconX from "@/assets/icons/IconX.svg";
-import IconMoon from "@/assets/icons/IconMoon.svg";
-import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
-import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
-import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
+import IconSearch from "@/assets/icons/IconSearch.svg";
 
-const { pathname } = Astro.url;
-
-// Remove trailing slash from current pathname if exists
-const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
-
-const isActive = (path: string) => {
-  const currentPathArray = currentPath.split("/").filter(p => p.trim());
-  const pathArray = path.split("/").filter(p => p.trim());
-
-  return currentPath === path || currentPathArray[0] === pathArray[0];
-};
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/posts", label: "Posts" },
+  { href: "/photos", label: "Photos" },
+  { href: "/tags", label: "Tags" },
+];
+const isActive = (href: string) =>
+  href === "/"
+    ? pathname === "/"
+    : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<header>
+<header class="site-header">
   <a
     id="skip-to-content"
     href="#main-content"
-    class="absolute start-16 -top-full z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
+    class="absolute start-4 -top-full z-50 bg-background px-3 py-2 focus:top-4"
+    >Skip to content</a
   >
-    Skip to content
-  </a>
-  <div
-    id="nav-container"
-    class="mx-auto flex max-w-app flex-col items-center justify-between sm:flex-row"
-  >
-    <div
-      id="top-nav-wrap"
-      class="relative flex w-full items-baseline justify-between bg-background p-4 sm:items-center sm:py-6"
-    >
-      <a
-        href="/"
-        class="absolute py-1 font-serif text-xl leading-8 font-normal whitespace-nowrap sm:static sm:my-auto sm:text-2xl sm:leading-none"
-      >
-        {SITE.title}
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-content">
+      <a href="/" class="site-name" aria-label={`${SITE.title} home`}>
+        <img
+          src="/favicon-96x96.png"
+          width="96"
+          height="96"
+          alt=""
+          class="site-portrait"
+        />
       </a>
-      <nav
-        id="nav-menu"
-        class="flex w-full flex-col items-center sm:ms-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
-      >
+      <div class="menu-content">
         <button
           id="menu-btn"
-          class="focus-outline self-end p-2 sm:hidden"
+          class="menu-toggle"
           aria-label="Open Menu"
           aria-expanded="false"
           aria-controls="menu-items"
         >
-          <IconX id="close-icon" class="hidden" />
-          <IconMenuDeep id="menu-icon" />
+          <span class="menu-toggle-icon" aria-hidden="true"></span>
         </button>
-        <ul
-          id="menu-items"
-          class:list={[
-            "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-            "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
-            "hidden",
-            "sm:mt-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
-          ]}
-        >
-          <li class="col-span-2">
-            <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
-              Posts
-            </a>
-          </li>
-          <li class="col-span-2">
-            <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
-              Tags
-            </a>
-          </li>
+        <ul id="menu-items" class="menu-list">
           {
-            SITE.showArchives && (
-              <li class="col-span-2">
-                <LinkButton
-                  href="/archives"
-                  class:list={[
-                    "focus-outline flex justify-center p-3 sm:p-1",
-                    {
-                      "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                    },
-                  ]}
-                  ariaLabel="archives"
-                  title="Archives"
+            links.map(({ href, label }) => (
+              <li>
+                <a
+                  href={href}
+                  class:list={{ "active-nav": isActive(href) }}
+                  aria-current={isActive(href) ? "page" : undefined}
                 >
-                  <IconArchive class="hidden sm:inline-block" />
-                  <span class="sm:sr-only">Archives</span>
-                </LinkButton>
+                  {label}
+                </a>
               </li>
-            )
-          }
-          <li class="col-span-1 flex items-center justify-center">
-            <LinkButton
-              href="/search"
-              class:list={[
-                "focus-outline flex p-3 sm:p-1",
-                { "[&>svg]:stroke-accent": isActive("/search") },
-              ]}
-              ariaLabel="search"
-              title="Search"
-            >
-              <IconSearch />
-              <span class="sr-only">Search</span>
-            </LinkButton>
-          </li>
-          {
-            SITE.lightAndDarkMode && (
-              <li class="col-span-1 flex items-center justify-center">
-                <button
-                  id="theme-btn"
-                  class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
-                  title="Toggles light & dark"
-                  aria-label="auto"
-                  aria-live="polite"
-                >
-                  <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                  <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                </button>
-              </li>
-            )
+            ))
           }
         </ul>
-      </nav>
+      </div>
+      <div class="nav-tools">
+        <a
+          href="/search"
+          class="search-link"
+          aria-label="Search"
+          title="Search"
+          aria-current={isActive("/search") ? "page" : undefined}
+        >
+          <IconSearch class="size-6" aria-hidden="true" />
+        </a>
+        {
+          SITE.lightAndDarkMode && (
+            <button
+              id="theme-btn"
+              class="theme-toggle"
+              title="Toggles light & dark"
+              aria-label="auto"
+              aria-live="polite"
+            >
+              <span
+                class="size-4 rounded-full bg-foreground"
+                aria-hidden="true"
+              />
+            </button>
+          )
+        }
+      </div>
     </div>
-  </div>
-  <Hr />
+  </nav>
 </header>
 
 <script>
-  function toggleNav() {
-    const menuBtn = document.querySelector("#menu-btn");
-    const menuItems = document.querySelector("#menu-items");
-    const menuIcon = document.querySelector("#menu-icon");
-    const closeIcon = document.querySelector("#close-icon");
-
-    if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
-
-    menuBtn.addEventListener("click", () => {
-      const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
-
-      menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
-      menuBtn.setAttribute("aria-label", openMenu ? "Open Menu" : "Close Menu");
-
-      menuItems.classList.toggle("hidden");
-      menuIcon.classList.toggle("hidden");
-      closeIcon.classList.toggle("hidden");
-    });
+  let menuController: AbortController;
+  function initMenu() {
+    menuController?.abort();
+    menuController = new AbortController();
+    const { signal } = menuController;
+    const nav = document.querySelector<HTMLElement>(".site-nav");
+    const button = document.querySelector<HTMLButtonElement>("#menu-btn");
+    if (!nav || !button) return;
+    function setOpen(open: boolean) {
+      nav?.classList.toggle("menu-open", open);
+      button?.setAttribute("aria-expanded", String(open));
+      button?.setAttribute("aria-label", open ? "Close Menu" : "Open Menu");
+    }
+    button.addEventListener(
+      "click",
+      () => setOpen(button.getAttribute("aria-expanded") !== "true"),
+      { signal }
+    );
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (
+          event.key === "Escape" &&
+          button.getAttribute("aria-expanded") === "true"
+        ) {
+          setOpen(false);
+          button.focus();
+        }
+      },
+      { signal }
+    );
+    document.addEventListener(
+      "pointerdown",
+      event => {
+        if (!nav.contains(event.target as Node)) setOpen(false);
+      },
+      { signal }
+    );
+    window
+      .matchMedia("(min-width: 768px)")
+      .addEventListener("change", () => setOpen(false), { signal });
   }
-
-  toggleNav();
-
-  // Runs on view transitions navigation
-  document.addEventListener("astro:after-swap", toggleNav);
+  initMenu();
+  document.addEventListener("astro:page-load", initMenu);
 </script>
+
+<style>
+  .site-nav {
+    position: relative;
+    width: 100%;
+    padding: 1rem 1rem 3rem;
+  }
+  .nav-content {
+    max-width: 48rem;
+    margin-inline: auto;
+    padding-right: 6rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .site-name {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .site-portrait {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .menu-content {
+    position: relative;
+    margin-left: 0;
+  }
+  .nav-tools {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+  }
+  .menu-toggle,
+  .theme-toggle,
+  .search-link {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-toggle {
+    position: relative;
+  }
+  .menu-toggle-icon,
+  .menu-toggle-icon::before,
+  .menu-toggle-icon::after {
+    position: absolute;
+    width: 1.5rem;
+    height: 1px;
+    background: currentColor;
+    content: "";
+  }
+  .menu-toggle-icon::before {
+    left: 0;
+    top: -5px;
+  }
+  .menu-toggle-icon::after {
+    left: 0;
+    top: 5px;
+  }
+  .menu-open .menu-toggle-icon {
+    background: transparent;
+  }
+  .menu-open .menu-toggle-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  .menu-open .menu-toggle-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+  .menu-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 0;
+    z-index: 20;
+    width: 12rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    border: 1px dashed var(--foreground);
+    background: var(--background);
+    padding: 1rem;
+  }
+  .menu-open .menu-list {
+    display: flex;
+  }
+  .menu-list a {
+    display: inline-flex;
+    align-items: center;
+    padding-block: 0.25rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .menu-list a:hover {
+    text-decoration-line: underline;
+  }
+  @media (max-width: 359px) {
+    .site-portrait {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    .nav-content {
+      gap: 0.25rem;
+    }
+  }
+  @media (min-width: 640px) {
+    .site-portrait {
+      width: 2rem;
+      height: 2rem;
+    }
+    .site-nav {
+      padding: 2rem 2rem 6rem;
+    }
+    .nav-content {
+      gap: 1rem;
+    }
+    .nav-tools {
+      top: 2rem;
+      right: 1.5rem;
+      gap: 2rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .menu-toggle {
+      display: none;
+    }
+    .menu-list {
+      display: flex;
+      position: static;
+      width: auto;
+      flex-direction: row;
+      gap: 1.5rem;
+      border: 0;
+      background: transparent;
+      padding: 0;
+    }
+  }
+</style>

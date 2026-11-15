@@ -19,6 +19,16 @@ const blog = defineCollection({
       ogImage: image().or(z.string()).optional(),
       heroImage: image().or(z.string()).optional(),
       heroImageAlt: z.string().optional(),
+      photos: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string().optional(),
+            caption: z.string().optional(),
+            showInGallery: z.boolean().default(false),
+          })
+        )
+        .default([]),
       description: z.string(),
       canonicalURL: z.string().optional(),
       hideEditPost: z.boolean().optional(),

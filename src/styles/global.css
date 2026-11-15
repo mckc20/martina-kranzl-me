@@ -6,25 +6,25 @@
 
 :root,
 html[data-theme="light"] {
-  --background: #fbf7ef;
-  --foreground: #332d27;
-  --accent: #78917a;
-  --accent-secondary: #b45a5a;
-  --accent-highlight: #c49a4e;
-  --muted: #e8dfd1;
-  --border: #d6c7b2;
-  --text-subtle: #7a6f63;
+  --background: #f2f1ec;
+  --foreground: #171717;
+  --accent: #171717;
+  --accent-secondary: #575753;
+  --accent-highlight: #575753;
+  --muted: #e5e4df;
+  --border: #d0cfca;
+  --text-subtle: #64645f;
 }
 
 html[data-theme="dark"] {
-  --background: #2f2f2d;
-  --foreground: #ede6d8;
-  --accent: #c49a4e;
-  --accent-secondary: #b45a5a;
-  --accent-highlight: #c49a4e;
-  --muted: #8a7a54;
-  --border: #4a4637;
-  --text-subtle: #d6c7b2;
+  --background: #171717;
+  --foreground: #f2f1ec;
+  --accent: #f2f1ec;
+  --accent-secondary: #c4c3be;
+  --accent-highlight: #c4c3be;
+  --muted: #292929;
+  --border: #40403e;
+  --text-subtle: #b4b3ae;
 }
 
 @theme inline {
@@ -68,22 +68,22 @@ html[data-theme="dark"] {
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
-  section:not(.pswp *),
+  section:not(.pswp *, .archive-year),
   footer {
     @apply mx-auto max-w-app px-4;
   }
 }
 
 @utility max-w-app {
-  @apply max-w-3xl;
+  @apply max-w-[50rem];
 }
 
 .active-nav {
-  @apply text-accent-secondary underline decoration-accent-secondary/70 decoration-1 underline-offset-4;
+  @apply text-foreground underline decoration-1 underline-offset-2;
 }
 
 @utility inline-link {
-  @apply underline decoration-dashed underline-offset-4 hover:text-accent focus-visible:no-underline;
+  @apply underline decoration-1 underline-offset-2 hover:decoration-dashed;
 }
 
 /* Override Tailwind preflight max-width:100% on img so PhotoSwipe
@@ -96,4 +96,27 @@ html[data-theme="dark"] {
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  html.scroll-smooth {
+    scroll-behavior: auto;
+  }
+}
+
+@utility page-title {
+  @apply mb-12 text-2xl font-normal sm:mb-16 sm:text-3xl;
+}
+
+@utility section-title {
+  @apply mb-12 text-2xl font-normal tracking-wide sm:mb-16;
+}
+
+@utility outline-button {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-foreground bg-transparent px-6 py-2 text-xl leading-tight transition-colors hover:bg-muted motion-reduce:transition-none;
+}
+
+@utility row-title {
+  @apply font-serif text-2xl leading-snug font-normal break-words decoration-dashed decoration-1 underline-offset-4 group-hover:underline group-focus-visible:underline;
 }

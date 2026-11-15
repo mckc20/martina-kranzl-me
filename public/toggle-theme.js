@@ -28,22 +28,16 @@ function reflectPreference() {
 
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
 
-  // Get a reference to the body element
-  const body = document.body;
-
-  // Check if the body element exists before using getComputedStyle
-  if (body) {
-    // Get the computed styles for the body element
-    const computedStyles = window.getComputedStyle(body);
-
-    // Get the background color property
-    const bgColor = computedStyles.backgroundColor;
-
-    // Set the background color in <meta theme-color ... />
-    document
-      .querySelector("meta[name='theme-color']")
-      ?.setAttribute("content", bgColor);
-  }
+  // Read the root token even before the body exists to avoid a theme-color flash.
+  const background = getComputedStyle(document.documentElement)
+    .getPropertyValue("--background")
+    .trim();
+  document
+    .querySelector("meta[name='theme-color']")
+    ?.setAttribute(
+      "content",
+      background || (themeValue === "dark" ? "#171717" : "#f2f1ec")
+    );
 }
 
 // set early so no page flashes / CSS is made aware
@@ -70,6 +64,7 @@ window.onload = () => {
 // Set theme-color value before page transition
 // to avoid navigation bar color flickering in Android dark mode
 document.addEventListener("astro:before-swap", event => {
+  event.newDocument.documentElement.setAttribute("data-theme", themeValue);
   const bgColor = document
     .querySelector("meta[name='theme-color']")
     ?.getAttribute("content");
@@ -83,6 +78,7 @@ document.addEventListener("astro:before-swap", event => {
 window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", ({ matches: isDark }) => {
+    if (localStorage.getItem("theme")) return;
     themeValue = isDark ? "dark" : "light";
-    setPreference();
+    reflectPreference();
   });

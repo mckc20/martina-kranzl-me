@@ -47,7 +47,7 @@
     }
 
     a {
-      @apply break-words text-foreground decoration-dashed underline-offset-4 hover:text-accent focus-visible:no-underline;
+      @apply break-words text-foreground decoration-dashed decoration-1 underline-offset-4 hover:text-accent focus-visible:no-underline;
     }
 
     ul {
@@ -59,11 +59,11 @@
     }
 
     hr {
-      @apply border-border;
+      @apply border-dashed border-foreground;
     }
 
     img {
-      @apply mx-auto border border-border;
+      @apply mx-auto;
     }
 
     .gallery-wrapper img {
@@ -102,13 +102,13 @@
     }
 
     &#article blockquote {
-      @apply relative my-8 border-0 bg-transparent py-1 ps-8 pe-0 font-normal not-italic text-foreground opacity-100 shadow-none;
+      @apply relative my-8 border-0 bg-transparent py-1 ps-8 pe-0 font-normal text-foreground not-italic opacity-100 shadow-none;
       quotes: none;
     }
 
     &#article blockquote::before {
       content: "\201c";
-      @apply absolute top-0 start-0 font-serif text-4xl leading-none font-bold not-italic text-accent-highlight;
+      @apply absolute start-0 top-0 font-serif text-4xl leading-none font-bold text-accent-highlight not-italic;
     }
 
     &#article blockquote::after {
@@ -117,7 +117,7 @@
     }
 
     &#article blockquote p {
-      @apply my-0 font-normal not-italic text-foreground before:content-none after:content-none;
+      @apply my-0 font-normal text-foreground not-italic before:content-none after:content-none;
     }
 
     details {
@@ -135,24 +135,24 @@
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
   .astro-code {
-    @apply flex border bg-(--shiki-light-bg) text-(--shiki-light) outline-border [&_span]:text-(--shiki-light);
+    @apply flex border bg-muted/50 text-(--shiki-light) outline-border [&_span]:text-(--shiki-light);
   }
 
   html[data-theme="dark"] .astro-code {
-    @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
+    @apply bg-muted/50 text-(--shiki-dark) [&_span]:text-(--shiki-dark);
   }
 
   /* Styles for Shiki transformers */
   /* https://shiki.style/packages/transformers */
   .astro-code {
     .line.diff.add {
-      @apply relative inline-block w-full bg-green-400/20 before:absolute before:-left-3 before:text-green-500 before:content-['+'];
+      @apply relative inline-block w-full bg-foreground/10 before:absolute before:-left-3 before:text-foreground before:content-['+'];
     }
     .line.diff.remove {
-      @apply relative inline-block w-full bg-red-500/20 before:absolute before:-left-3 before:text-red-500 before:content-['-'];
+      @apply relative inline-block w-full bg-foreground/5 before:absolute before:-left-3 before:text-text-subtle before:content-['-'];
     }
     .line.highlighted {
-      @apply inline-block w-full bg-slate-400/20;
+      @apply inline-block w-full bg-foreground/10;
     }
     .highlighted-word {
       @apply rounded-sm border border-border px-0.5 py-px;

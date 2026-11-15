@@ -1,10 +1,10 @@
 ---
 layout: ../layouts/AboutLayout.astro
-title: "Ueber mich"
+title: "About me"
 ---
 
-Ich bin Martina Kranzl und teile hier Fotos und Zeichnungen aus Wien und von Reisen.
+#### Hi, I'm Martina!
 
-Auf diesem Blog sammle ich Eindruecke aus der Natur, von Sonnenaufgaengen und Sonnenuntergaengen sowie kleine kreative Projekte.
+I live in Vienna, Austira and I enjoy taking photos, drawing and developing. I like to spent time in nature and to travel to new places.
 
-Danke fuers Vorbeischauen.
+I'm currently developing an app for tracking your reading, check it out if you want: [Reading Journal](https://my-reading-journal.vercel.app).

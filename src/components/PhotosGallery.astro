@@ -1,0 +1,628 @@
+---
+// Ported from Astro AntfuStyle Theme (MIT), commit f3ef02cae0b8f4a5ae76e7afcef6a75cc6d42709.
+// Copyright (c) 2024 Stephanie Lin. See licenses/astro-antfustyle-theme.txt.
+import Loader from "./GalleryLoader.astro";
+import ImageViewer from "./ImageViewer.astro";
+
+import { hash } from "@/pages/photos/photos.[hash].json";
+
+interface Props {
+  gap?: number;
+  minPhotoWidth?: number;
+  maxPhotoWidth?: number;
+  batchSize?: number;
+  layout?: "masonry" | "square";
+  masonryStrategy?: "sequential" | "balanced";
+}
+
+const {
+  gap = 16,
+  minPhotoWidth = 240,
+  maxPhotoWidth = 1000,
+  batchSize = 15,
+  layout = "masonry",
+  masonryStrategy = "sequential",
+} = Astro.props as Props;
+---
+
+<div class="antfu-photo-wrap">
+  <photo-view
+    data-hash={hash}
+    data-gap={gap}
+    data-min-photo-width={minPhotoWidth}
+    data-max-photo-width={maxPhotoWidth}
+    data-batch-size={batchSize}
+    data-layout={layout}
+    data-masonry-strategy={layout === "masonry" ? masonryStrategy : undefined}
+    class="photo-view relative block w-full"
+  >
+    <div class="photo-container" aria-label="Photos"></div>
+    <p class="photo-empty" hidden>No photos to show yet.</p>
+    <button
+      class="photo-layout-toggle"
+      title="Layout toggle"
+      aria-label="Toggle photo layout"
+    >
+      <svg
+        class="icon-masonry"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+        ><path
+          d="M22 20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H21C21.5523 3 22 3.44772 22 4V20ZM11 15H4V19H11V15ZM20 11H13V19H20V11ZM11 5H4V13H11V5ZM20 5H13V9H20V5Z"
+        ></path></svg
+      >
+      <svg
+        class="icon-grid"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+        ><path
+          d="M4 10L8 10V14H4V10ZM4 19V16H8V19H4ZM10 19V16H14V19H10ZM16 19V16H20V19H16ZM16 14V10H20V14H16ZM16 8V5H20V8H16ZM14 5V8H10V5H14ZM14 10V14H10V10H14ZM4 8V5H8V8L4 8ZM3 3C2.44772 3 2 3.44772 2 4V20C2 20.5523 2.44772 21 3 21H21C21.5523 21 22 20.5523 22 20V4C22 3.44772 21.5523 3 21 3H3Z"
+        ></path></svg
+      >
+    </button>
+  </photo-view>
+  <Loader class="photo-loader" />
+  <ImageViewer
+    selector=".photo-container"
+    options={{ url: "data-origin" }}
+    asyncInsert={true}
+    tabFocus={true}
+  />
+</div>
+
+<script>
+  import type { PhotoItem } from "@/pages/photos/photos.[hash].json";
+
+  class PhotoView extends HTMLElement {
+    #initialized = false;
+    #isMasonry = this.dataset.layout === "masonry";
+    #masonryStrategy = this.dataset.masonryStrategy || "sequential";
+
+    #gap = parseInt(this.dataset.gap || "16", 10);
+    #minPhotoWidth = parseInt(this.dataset.minPhotoWidth || "240", 10);
+    #maxPhotoWidth = parseInt(this.dataset.maxPhotoWidth || "1000", 10);
+    #batchSize = parseInt(this.dataset.batchSize || "15", 10);
+
+    #columns = 0;
+    #colWidth = 0;
+    #containerWidth = 0;
+    #colHeights: number[] = [];
+
+    #currentIndex = 0;
+    #isLoading = false;
+    #allLoaded = false;
+    #allItems: PhotoItem[] = [];
+
+    #ticking = false;
+    #distanceToBottom = window.innerHeight * 0.6;
+
+    #loader: HTMLElement | null = null;
+    #container: HTMLElement | null = null;
+    #button: HTMLButtonElement | null = null;
+    #resizeObserver: ResizeObserver | null = null;
+    #debounceTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    async connectedCallback() {
+      if (this.#initialized) return;
+      this.#initialized = true;
+      this.#container = this.querySelector(".photo-container");
+      this.#loader = this.parentElement?.querySelector(".photo-loader") ?? null;
+
+      try {
+        await this.#fetchData();
+      } catch {
+        if (this.#loader)
+          this.#loader.textContent =
+            "Photos could not be loaded. Reload the page to try again.";
+        return;
+      }
+      if (!this.isConnected) return;
+      const empty = this.querySelector<HTMLElement>(".photo-empty");
+      if (empty) empty.hidden = this.#allItems.length > 0;
+      this.#getLayout();
+      this.#buildLayout();
+      this.#handleWindowScroll();
+
+      window.addEventListener("scroll", this.#handleWindowScroll, {
+        passive: true,
+      });
+
+      this.#resizeObserver = new ResizeObserver(this.#handleResize);
+      this.#resizeObserver.observe(this);
+
+      this.#button = this.querySelector(".photo-layout-toggle");
+      this.#button?.addEventListener("click", this.#handleClickToggle);
+
+      this.#container?.addEventListener("keydown", this.#handleKeyOpen);
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener("scroll", this.#handleWindowScroll);
+
+      if (this.#resizeObserver) {
+        this.#resizeObserver.disconnect();
+        this.#resizeObserver = null;
+      }
+
+      if (this.#debounceTimeout) {
+        clearTimeout(this.#debounceTimeout);
+        this.#debounceTimeout = null;
+      }
+
+      if (this.#button) {
+        this.#button.removeEventListener("click", this.#handleClickToggle);
+        this.#button = null;
+      }
+
+      if (this.#container) {
+        this.#container.removeEventListener("keydown", this.#handleKeyOpen);
+        this.#container = null;
+      }
+
+      this.#initialized = false;
+    }
+
+    #fetchData = async () => {
+      // Astro may retain a previously rendered hash while content changes in dev.
+      const url = import.meta.env.DEV
+        ? "/photos/data.json"
+        : `/photos/photos.${this.dataset.hash}.json`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Photo data could not be loaded");
+      const [, data] = (await res.json()) as [string, PhotoItem[]];
+      this.#allItems = data;
+    };
+
+    #getLayout = () => {
+      try {
+        const saved = localStorage.getItem("photo-layout");
+        if (saved === "masonry" || saved === "square")
+          this.#isMasonry = saved === "masonry";
+      } catch {
+        /* Storage is optional. */
+      }
+      this.dataset.layout = this.#isMasonry ? "masonry" : "square";
+    };
+
+    #buildLayout = () => {
+      if (this.#isMasonry) {
+        this.#getMasonryParams();
+        this.#renderMasonry();
+        this.#isLoading = false;
+      } else {
+        this.#getGridParams();
+        this.#renderGrid();
+        this.#isLoading = false;
+      }
+    };
+
+    #getMasonryParams = () => {
+      this.#containerWidth = this.offsetWidth;
+
+      this.#columns = Math.floor(this.#containerWidth / this.#minPhotoWidth);
+      this.#columns = Math.max(
+        1,
+        Math.min(this.#columns, this.#allItems.length)
+      );
+
+      const totalGap = this.#gap * (this.#columns - 1);
+      this.#colWidth = (this.#containerWidth - totalGap) / this.#columns;
+      this.#colWidth = Math.min(this.#colWidth, this.#maxPhotoWidth);
+      this.#container?.style.setProperty(
+        "--photo-width",
+        `${this.#colWidth}px`
+      );
+
+      this.#colHeights = new Array(this.#columns).fill(0);
+    };
+
+    #calcMasonryTranslate = (
+      idx: number
+    ): { col: number; left: number; top: number } => {
+      const col =
+        this.#masonryStrategy === "sequential"
+          ? idx % this.#columns
+          : this.#colHeights.indexOf(Math.min(...this.#colHeights));
+      const top = this.#colHeights[col];
+      const left = col * (this.#colWidth + this.#gap);
+      return { col, left, top };
+    };
+
+    #renderMasonry = () => {
+      const startIndex = this.#currentIndex * this.#batchSize;
+      const endIndex = startIndex + this.#batchSize;
+      const items = this.#allItems.slice(startIndex, endIndex);
+
+      if (items.length === 0) {
+        this.#isLoading = false;
+        this.#allLoaded = true;
+        if (this.#loader) this.#loader.style.display = "none";
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      let idx = startIndex;
+      for (const item of items) {
+        const aspect = item.aspectRatio;
+        const height = this.#colWidth / aspect;
+        const { col, left, top } = this.#calcMasonryTranslate(idx);
+
+        const fig = document.createElement("figure");
+        fig.className = "photo-figure";
+        fig.dataset.aspectRatio = aspect.toString();
+        fig.setAttribute("role", "button");
+        fig.setAttribute("tabindex", "0");
+        fig.setAttribute("aria-label", "Open viewer");
+        fig.style.setProperty("--photo-top", top.toString() + "px");
+        fig.style.setProperty("--photo-left", left.toString() + "px");
+        fig.style.setProperty("--photo-height", `${height}px`);
+        fig.style.setProperty(
+          "--photo-placeholder",
+          `url(${item.placeholder})`
+        );
+
+        const img = document.createElement("img");
+        img.src = item.thumbnail;
+        img.alt = item.alt;
+        img.dataset.caption = item.desc;
+        img.dataset.postUrl = item.postUrl;
+        img.dataset.origin = item.src;
+        img.addEventListener(
+          "load",
+          function (this: HTMLImageElement) {
+            this.style.setProperty("--photo-opacity", "1");
+          },
+          { once: true }
+        );
+        img.addEventListener(
+          "error",
+          () => img.style.setProperty("--photo-opacity", "1"),
+          { once: true }
+        );
+        if (img.complete) img.style.setProperty("--photo-opacity", "1");
+        fig.appendChild(img);
+
+        if (item.desc) {
+          const figcaption = document.createElement("figcaption");
+          figcaption.textContent = item.desc;
+          figcaption.setAttribute("aria-hidden", "true");
+          fig.appendChild(figcaption);
+        }
+
+        this.#colHeights[col] += this.#colWidth / aspect + this.#gap;
+        fragment.appendChild(fig);
+        idx++;
+      }
+      if (this.#loader) this.#loader.style.display = "none";
+      this.style.height = `${Math.max(...this.#colHeights)}px`;
+      this.#container?.appendChild(fragment);
+      this.#currentIndex++;
+    };
+
+    #getGridParams = () => {
+      this.#container?.style.setProperty(
+        "--min-photo-width",
+        `${this.#minPhotoWidth}px`
+      );
+      this.#container?.style.setProperty("--photo-gap", `${this.#gap}px`);
+    };
+
+    #renderGrid = () => {
+      const startIndex = this.#currentIndex * this.#batchSize;
+      const endIndex = startIndex + this.#batchSize;
+      const items = this.#allItems.slice(startIndex, endIndex);
+
+      if (items.length === 0) {
+        this.#isLoading = false;
+        this.#allLoaded = true;
+        if (this.#loader) this.#loader.style.display = "none";
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      for (const item of items) {
+        const fig = document.createElement("figure");
+        fig.className = "photo-figure";
+        fig.setAttribute("role", "button");
+        fig.setAttribute("tabindex", "0");
+        fig.setAttribute("aria-label", "Open viewer");
+        fig.style.setProperty(
+          "--photo-placeholder",
+          `url(${item.placeholder})`
+        );
+
+        const img = document.createElement("img");
+        img.src = item.thumbnail;
+        img.alt = item.alt;
+        img.dataset.caption = item.desc;
+        img.dataset.postUrl = item.postUrl;
+        img.dataset.origin = item.src;
+        img.addEventListener(
+          "load",
+          function (this: HTMLImageElement) {
+            this.style.setProperty("--photo-opacity", "1");
+          },
+          { once: true }
+        );
+        img.addEventListener(
+          "error",
+          () => img.style.setProperty("--photo-opacity", "1"),
+          { once: true }
+        );
+        if (img.complete) img.style.setProperty("--photo-opacity", "1");
+        fig.appendChild(img);
+
+        if (item.desc) {
+          const figcaption = document.createElement("figcaption");
+          figcaption.textContent = item.desc;
+          figcaption.setAttribute("aria-hidden", "true");
+          fig.appendChild(figcaption);
+        }
+
+        fragment.appendChild(fig);
+      }
+      if (this.#loader) this.#loader.style.display = "none";
+      this.#container?.appendChild(fragment);
+      this.#currentIndex++;
+    };
+
+    #updateMasonryLayout = () => {
+      if (this.#containerWidth === this.offsetWidth) return;
+      this.#getMasonryParams();
+
+      const figs = Array.from(
+        this.querySelectorAll(".photo-figure")
+      ) as HTMLElement[];
+      for (let idx = 0; idx < figs.length; idx++) {
+        const fig = figs[idx];
+        const { col, left, top } = this.#calcMasonryTranslate(idx);
+        const ratio = parseFloat(fig.dataset.aspectRatio!);
+
+        fig.style.setProperty("--photo-left", left.toString() + "px");
+        fig.style.setProperty("--photo-top", top.toString() + "px");
+        fig.style.setProperty("--photo-height", `${this.#colWidth / ratio}px`);
+
+        this.#colHeights[col] += this.#colWidth / ratio + this.#gap;
+      }
+
+      this.style.height = `${Math.max(...this.#colHeights)}px`;
+    };
+
+    #handleScroll = () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const isNearBottom =
+        documentHeight - (scrollTop + windowHeight) <= this.#distanceToBottom;
+
+      if (isNearBottom) {
+        this.#isLoading = true;
+        if (this.#isMasonry) this.#renderMasonry();
+        else this.#renderGrid();
+        this.#isLoading = false;
+      }
+    };
+
+    #handleWindowScroll = () => {
+      if (!this.#ticking && !this.#isLoading && !this.#allLoaded) {
+        requestAnimationFrame(() => {
+          this.#handleScroll();
+          this.#ticking = false;
+        });
+        this.#ticking = true;
+      }
+    };
+
+    #debounceUpdateLayout = () => {
+      if (this.#debounceTimeout) clearTimeout(this.#debounceTimeout);
+      this.#debounceTimeout = setTimeout(
+        () => this.#updateMasonryLayout(),
+        100
+      );
+    };
+
+    #handleResize = () => {
+      if (this.#isMasonry) this.#debounceUpdateLayout();
+    };
+
+    #handleClickToggle = () => {
+      if (this.#container) {
+        this.#container.innerHTML = "";
+        this.#container.style = "";
+      }
+      if (this.#loader) this.#loader.style.display = "";
+
+      this.#isMasonry = !this.#isMasonry;
+      this.dataset.layout = this.#isMasonry ? "masonry" : "square";
+      this.style.height = this.#isMasonry ? "0" : "auto";
+
+      this.#currentIndex = 0;
+      this.#isLoading = true;
+      this.#allLoaded = false;
+
+      this.#buildLayout();
+
+      try {
+        window.localStorage.setItem(
+          "photo-layout",
+          this.#isMasonry ? "masonry" : "square"
+        );
+      } catch {
+        /* Storage is optional. */
+      }
+    };
+
+    // event delegation: open viewer when focus is on a figure and presses Enter
+    #handleKeyOpen = (ev: KeyboardEvent) => {
+      if (ev.defaultPrevented) return;
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      ev.preventDefault();
+
+      const fig = (ev.target as HTMLElement)?.closest(".photo-figure");
+      if (!fig) return;
+
+      const img = fig.querySelector("img");
+      img?.click();
+    };
+  }
+
+  if (!customElements.get("photo-view"))
+    customElements.define("photo-view", PhotoView);
+</script>
+
+<style is:global>
+  .antfu-photo-wrap {
+    margin-inline: 5rem;
+  }
+  .photo-view .photo-layout-toggle {
+    position: fixed;
+    left: 20px;
+    bottom: 24px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    opacity: 0.3;
+    font-size: 16px;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .photo-layout-toggle .icon-masonry,
+  .photo-layout-toggle .icon-grid {
+    display: none;
+    width: 1.2em;
+    height: 1.2em;
+  }
+  .photo-view .photo-layout-toggle:hover {
+    opacity: 1 !important;
+    background: #8883;
+  }
+  .photo-figure figcaption {
+    pointer-events: none;
+  }
+  .photo-view .photo-empty[hidden] {
+    display: none;
+  }
+  @media (max-width: 1127px) {
+    .antfu-photo-wrap {
+      margin-inline: 2.5rem;
+    }
+    .photo-view .photo-layout-toggle {
+      opacity: 0.5;
+      background: #8883;
+    }
+    html[data-theme="dark"] .photo-view .photo-layout-toggle {
+      background: #8886;
+    }
+  }
+  @media (max-width: 767px) {
+    .antfu-photo-wrap {
+      margin-inline: 0.25rem;
+    }
+  }
+  @media print {
+    .photo-view .photo-layout-toggle {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .photo-view .photo-figure img,
+    .photo-view .photo-figure figcaption,
+    .photo-view .photo-layout-toggle {
+      transition: none;
+    }
+    .photo-view .photo-figure:hover img,
+    .photo-view .photo-figure:focus img {
+      transform: none;
+    }
+  }
+
+  .photo-view[data-layout="masonry"] .icon-masonry {
+    display: block;
+  }
+
+  .photo-view[data-layout="square"] .icon-grid {
+    display: block;
+  }
+
+  .photo-view[data-layout="square"] .photo-container {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(var(--min-photo-width), 1fr)
+    );
+    gap: var(--photo-gap);
+  }
+
+  .photo-figure {
+    cursor: pointer;
+    overflow: hidden;
+
+    background-size: cover;
+    background-image: var(--photo-placeholder);
+  }
+
+  .photo-view[data-layout="masonry"] .photo-figure {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: var(--photo-width);
+    height: var(--photo-height);
+    border-radius: 0.375rem;
+
+    transform: translate(var(--photo-left), var(--photo-top));
+  }
+
+  .photo-view[data-layout="square"] .photo-figure {
+    position: relative;
+    aspect-ratio: 1;
+  }
+
+  .photo-figure img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    opacity: var(--photo-opacity, 0);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .photo-figure:hover img,
+  .photo-figure:focus img {
+    transform: scale(1.05);
+  }
+
+  .photo-figure figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    padding: 2rem 0.75rem 0.75rem;
+
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 400;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    opacity: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+
+    transition: all 0.3s ease-in-out;
+  }
+
+  .photo-figure:hover figcaption,
+  .photo-figure:focus figcaption {
+    opacity: 1;
+  }
+</style>

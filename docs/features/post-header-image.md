@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Adds an optional full-width header image to individual blog posts. The image is rendered above the post date, title, tags, and article body, giving photo-heavy posts a visual lead-in without requiring the image to be embedded manually in the MDX content.
+Adds an optional full-width header image to individual blog posts. The image is rendered after the post title, date, and tags, and before the article body, giving photo-heavy posts a visual lead-in without requiring the image to be embedded manually in the MDX content.
 
 ## Usage
 
@@ -32,10 +32,10 @@ heroImageAlt: "Sonnenuntergang über einem Weingarten"
 
 ## Configuration
 
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `heroImage` | `ImageMetadata \| string` | *none* | Header image rendered above the post content |
-| `heroImageAlt` | `string` | `""` | Alternative text for the header image |
+| Field          | Type                      | Default | Description                                  |
+| -------------- | ------------------------- | ------- | -------------------------------------------- |
+| `heroImage`    | `ImageMetadata \| string` | _none_  | Header image rendered above the post content |
+| `heroImageAlt` | `string`                  | `""`    | Alternative text for the header image        |
 
 ### Local optimized images
 
@@ -92,6 +92,6 @@ import cover from "@/assets/blogimages/blaetterregen/cover.jpg";
 ## Implementation details
 
 - **Schema**: `src/content.config.ts` defines `heroImage` as `image().or(z.string()).optional()` and `heroImageAlt` as an optional string.
-- **Layout**: `src/layouts/PostDetails.astro` renders the image before the post metadata when `heroImage` is present.
+- **Layout**: `src/layouts/PostDetails.astro` renders the image after the post metadata when `heroImage` is present.
 - **Sizing**: The header uses a full-viewport-width layout with a `21 / 8` aspect ratio and `object-cover`, so the image may be cropped horizontally or vertically depending on the viewport.
 - **Optimization**: Local images resolved as Astro image metadata are rendered through `<Image>` with responsive widths; URL strings are rendered with a plain `<img>`.

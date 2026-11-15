@@ -12,8 +12,7 @@ import BackToTopButton from "@/components/BackToTopButton.astro";
 import { getPath } from "@/utils/getPath";
 import { formatGermanDate } from "@/utils/formatDate";
 import { slugifyStr } from "@/utils/slugify";
-import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
-import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
+import Card from "@/components/Card.astro";
 import { SITE } from "@/config";
 
 export interface Props {
@@ -72,19 +71,13 @@ const layoutProps = {
   scrollSmooth: true,
 };
 
-/* ========== Prev/Next Posts ========== */
-
-const allPosts = posts.map(({ data: { title }, id, filePath }) => ({
-  id,
-  title,
-  filePath,
-}));
-
-const currentPostIndex = allPosts.findIndex(a => a.id === post.id);
-
-const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
-const nextPost =
-  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
+const currentPostIndex = posts.findIndex(entry => entry.id === post.id);
+const readNextPosts =
+  currentPostIndex < 0
+    ? []
+    : [posts[currentPostIndex + 1], posts[currentPostIndex - 1]].filter(
+        entry => entry !== undefined
+      );
 ---
 
 <Layout {...layoutProps}>
@@ -93,110 +86,93 @@ const nextPost =
   <main
     id="main-content"
     class:list={[
-      "mx-auto w-full max-w-app px-4 pb-12",
+      "mx-auto w-full max-w-app flex-1 px-4",
       { "mt-8": !SITE.showBackButton },
     ]}
-    data-pagefind-body
   >
-    {
-      heroImage && (
-        <figure class="mb-8">
-          {typeof heroImage === "string" ? (
-            <img
-              src={heroImage}
-              alt={heroImageAlt ?? ""}
-              class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
-              loading="eager"
-            />
-          ) : (
-            <Image
-              src={heroImage}
-              alt={heroImageAlt ?? ""}
-              class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
-              widths={[640, 960, 1280, 1600, 1920]}
-              sizes="100vw"
-            />
-          )}
-          {heroImageAlt && (
-            <figcaption class="mt-2 text-sm text-text-subtle italic">
-              {heroImageAlt}
-            </figcaption>
-          )}
-        </figure>
-      )
-    }
-    <time
-      datetime={pubDatetime.toISOString()}
-      class="mb-2 block font-sans text-xl tracking-wide text-text-subtle italic"
-    >
-      {postDate}
-    </time>
-    <h1
-      transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-normal text-foreground sm:text-3xl"
-    >
-      {title}
-    </h1>
-    <ul class="">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul>
-    {
-      SITE.editPost.enabled && (
-        <EditPost {hideEditPost} {post} class="mt-2 max-sm:hidden" />
-      )
-    }
-    <article
-      id="article"
-      class="app-prose mx-auto mt-8 max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
-    >
-      <Content />
+    <article id="post-content" data-pagefind-body>
+      <div class="mb-8">
+        <h1
+          transition:name={slugifyStr(title)}
+          class="text-2xl font-normal text-foreground sm:text-3xl"
+        >
+          {title}
+        </h1>
+        <time
+          datetime={pubDatetime.toISOString()}
+          class="mt-4 block font-sans text-xl tracking-wide text-text-subtle italic"
+        >
+          {postDate}
+        </time>
+        <ul class="mt-2 flex flex-wrap gap-x-3">
+          {
+            tags.map(tag => (
+              <Tag tag={slugifyStr(tag)} tagName={tag} appearance="quiet" />
+            ))
+          }
+        </ul>
+        {
+          SITE.editPost.enabled && (
+            <EditPost {hideEditPost} {post} class="mt-2 max-sm:hidden" />
+          )
+        }
+      </div>
+      {
+        heroImage && (
+          <figure class="mb-8">
+            {typeof heroImage === "string" ? (
+              <img
+                src={heroImage}
+                alt={heroImageAlt ?? ""}
+                class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+                loading="eager"
+              />
+            ) : (
+              <Image
+                src={heroImage}
+                alt={heroImageAlt ?? ""}
+                class="relative left-1/2 aspect-[21/8] w-screen -translate-x-1/2 border-y border-border object-cover"
+                widths={[640, 960, 1280, 1600, 1920]}
+                sizes="100vw"
+              />
+            )}
+            {heroImageAlt && (
+              <figcaption class="mt-2 text-sm text-text-subtle italic">
+                {heroImageAlt}
+              </figcaption>
+            )}
+          </figure>
+        )
+      }
+      <div id="article" class="app-prose mx-auto mt-8 mb-10 max-w-app">
+        <Content />
+      </div>
+
+      <EditPost class="mt-8 sm:hidden" {hideEditPost} {post} />
+
+      <BackToTopButton />
+
+      <ShareLinks />
     </article>
-
-    <hr class="my-8 border-dashed" />
-
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
-
-    <ul class="mt-4 mb-8 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul>
-
-    <BackToTopButton />
-
-    <ShareLinks />
-
-    <hr class="my-6 border-dashed" />
-
-    <!-- Previous/Next Post Buttons -->
-    <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-      {
-        prevPost && (
-          <a
-            href={getPath(prevPost.id, prevPost.filePath)}
-            class="flex w-full gap-1 hover:opacity-75"
-          >
-            <IconChevronLeft class="inline-block flex-none rtl:rotate-180" />
-            <div>
-              <span>Previous Post</span>
-              <div class="text-base text-accent/85">{prevPost.title}</div>
-            </div>
-          </a>
-        )
-      }
-      {
-        nextPost && (
-          <a
-            href={getPath(nextPost.id, nextPost.filePath)}
-            class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"
-          >
-            <div>
-              <span>Next Post</span>
-              <div class="text-base text-accent/85">{nextPost.title}</div>
-            </div>
-            <IconChevronRight class="inline-block flex-none rtl:rotate-180" />
-          </a>
-        )
-      }
-    </div>
+    {
+      readNextPosts.length > 0 && (
+        <section
+          id="read-next"
+          aria-labelledby="read-next-heading"
+          data-pagefind-ignore
+          class="mt-16 w-full !px-0 sm:mt-24"
+        >
+          <h2 id="read-next-heading" class="section-title">
+            Read Next
+          </h2>
+          <ul>
+            {readNextPosts.map(entry => (
+              <Card {...entry} variant="h3" />
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </main>
   <Footer />
 </Layout>
@@ -208,11 +184,11 @@ const nextPost =
     // Create the main container div
     const progressContainer = document.createElement("div");
     progressContainer.className =
-      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+      "progress-container fixed top-0 z-10 h-px w-full bg-background";
 
     // Create the progress bar div
     const progressBar = document.createElement("div");
-    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.className = "progress-bar h-px w-0 bg-accent";
     progressBar.id = "myBar";
 
     // Append the progress bar to the progress container
@@ -227,18 +203,19 @@ const nextPost =
    *  when user scrolls */
   function updateScrollProgress() {
     document.addEventListener("scroll", () => {
-      const winScroll =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      const height =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      if (document) {
-        const myBar = document.getElementById("myBar");
-        if (myBar) {
-          myBar.style.width = scrolled + "%";
-        }
-      }
+      const postContent = document.getElementById("post-content");
+      const progressBar = document.getElementById("myBar");
+      if (!postContent || !progressBar) return;
+      const postTop = postContent.getBoundingClientRect().top + window.scrollY;
+      const readingHeight = Math.max(
+        1,
+        postContent.offsetHeight - window.innerHeight
+      );
+      const progress = Math.min(
+        100,
+        Math.max(0, ((window.scrollY - postTop) / readingHeight) * 100)
+      );
+      progressBar.style.width = `${progress}%`;
     });
   }
   updateScrollProgress();
@@ -247,7 +224,7 @@ const nextPost =
    *  allowing sharing of sections easily */
   function addHeadingLinks() {
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll("#article :is(h2, h3, h4, h5, h6)")
     );
     for (const heading of headings) {
       heading.classList.add("group");

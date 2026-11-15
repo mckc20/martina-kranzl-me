@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal blog built with Astro using the AstroPaper theme. The site is deployed on Netlify.
+Personal blog built with Astro using the AstroPaper theme. The site is deployed on Vercel, using the `@astrojs/vercel` adapter and Vercel image service configured in `astro.config.ts`.
 
 ## Common Commands
 

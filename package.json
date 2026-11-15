@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "generate:og": "node scripts/generate-og-image.mjs",
-    "generate:favicon": "node scripts/generate-favicon.mjs"
+    "generate:favicon": "node scripts/generate-favicon.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.4",
@@ -30,7 +31,8 @@
     "remark-toc": "^9.0.0",
     "satori": "^0.15.2",
     "sharp": "^0.34.2",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "viewerjs": "^1.15.2"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

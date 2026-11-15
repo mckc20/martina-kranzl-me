@@ -21,9 +21,12 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   site: SITE.website,
 
-  integrations: [sitemap({
-    filter: page => SITE.showArchives || !page.endsWith("/archives"),
-  }), mdx()],
+  integrations: [
+    sitemap({
+      filter: page => SITE.showArchives || !page.endsWith("/archives"),
+    }),
+    mdx(),
+  ],
 
   markdown: {
     remarkPlugins: [
@@ -71,5 +74,10 @@ export default defineConfig({
     },
   },
 
-  adapter: vercel({ imageService: true }),
+  adapter: vercel({
+    imageService: true,
+    imagesConfig: {
+      sizes: [24, 320, 640, 720, 750, 828, 960, 1080, 1200, 1920, 2048, 3840],
+    },
+  }),
 });

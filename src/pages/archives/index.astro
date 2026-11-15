@@ -28,9 +28,13 @@ const posts = await getCollection("blog", ({ data }) => !data.draft);
       )
         .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
         .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-3xl font-bold">{year}</span>
-            <sup class="text-base">{yearGroup.length}</sup>
+          <section class="archive-year mb-16 last:mb-0 sm:mb-24">
+            <h2 class="section-title">
+              {year}{" "}
+              <span class="text-base text-text-subtle">
+                ({yearGroup.length})
+              </span>
+            </h2>
             {Object.entries(
               getPostsByGroupCondition(
                 yearGroup,
@@ -39,13 +43,14 @@ const posts = await getCollection("blog", ({ data }) => !data.draft);
             )
               .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
               .map(([month, monthGroup]) => (
-                <div class="flex flex-col sm:flex-row">
-                  <div class="mt-6 min-w-36 text-xl sm:my-6">
-                    <span class="font-bold">
-                      {formatGermanMonth(Number(month))}
+                <div class="mb-12 last:mb-0 sm:mb-16">
+                  <h3 class="mb-8 text-xl font-bold">
+                    <span>{formatGermanMonth(Number(month))}</span>
+                    <span class="text-base text-text-subtle">
+                      {" "}
+                      ({monthGroup.length})
                     </span>
-                    <sup class="text-sm">{monthGroup.length}</sup>
-                  </div>
+                  </h3>
                   <ul class="min-w-0 flex-1">
                     {monthGroup
                       .sort(
@@ -58,12 +63,12 @@ const posts = await getCollection("blog", ({ data }) => !data.draft);
                           )
                       )
                       .map(data => (
-                        <Card {...data} />
+                        <Card variant="h3" {...data} />
                       ))}
                   </ul>
                 </div>
               ))}
-          </div>
+          </section>
         ))
     }
   </Main>

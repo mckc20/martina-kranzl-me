@@ -7,7 +7,6 @@ import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
 import PhotoblogGrid from "@/components/PhotoblogGrid.astro";
-import Hr from "@/components/Hr.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
@@ -40,11 +39,11 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
 <Layout>
   <Header />
   <main id="main-content" data-layout="index">
-    <section id="hero" class="pt-8 pb-6">
-      <p class="[&_a]:inline-link">
+    <section id="hero" class="mb-16 sm:mb-24">
+      <h1 class="font-sans text-xl leading-relaxed font-normal">
         Willkommen auf meinem Blog. Hier teile ich Fotos und Zeichnungen aus
         Wien, von Reisen und aus dem Alltag.
-      </p>
+      </h1>
       {
         // only display if at least one social link is enabled
         SOCIALS.length > 0 && (
@@ -56,20 +55,15 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
       }
     </section>
 
-    <Hr />
-
     {
       showLatestRegularPost && latestRegularPost && (
         <>
-          <section id="latest-post" class="pt-12 pb-6">
-            <h2 class="text-2xl font-normal tracking-wide">Latest Post</h2>
+          <section id="latest-post" class="mb-16 sm:mb-24">
+            <h2 class="section-title">Latest Post</h2>
             <ul>
               <Card variant="h3" {...latestRegularPost} />
             </ul>
           </section>
-          {(photoblogPosts.length > 0 || remainingRegularPosts.length > 0) && (
-            <Hr />
-          )}
         </>
       )
     }
@@ -77,35 +71,34 @@ const photoblogPosts = sortedPosts.filter(({ data }) =>
     {
       photoblogPosts.length > 0 && (
         <>
-          <section id="photoblog" class="pt-12 pb-6">
-            <h2 class="mb-6 text-2xl font-normal tracking-wide">Photoblog</h2>
+          <section id="photoblog" class="mb-16 sm:mb-24">
+            <h2 class="section-title">Photoblog</h2>
             <PhotoblogGrid
               posts={photoblogPosts.slice(0, SITE.photoblogPostsPerIndex)}
             />
-            <div class="my-8 text-center">
-              <LinkButton href="/tags/fotoblog/">
+            <div class="mt-12 sm:mt-16">
+              <LinkButton href="/tags/fotoblog/" class="outline-button">
                 Browse more photos
                 <IconArrowRight class="inline-block rtl:-rotate-180" />
               </LinkButton>
             </div>
           </section>
-          {remainingRegularPosts.length > 0 && <Hr />}
         </>
       )
     }
 
     {
       remainingRegularPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-normal tracking-wide">Posts</h2>
+        <section id="recent-posts" class="mb-16 sm:mb-24">
+          <h2 class="section-title">Posts</h2>
           <ul>
             {remainingRegularPosts.map(
               (data, index) =>
                 index < SITE.postPerIndex && <Card variant="h3" {...data} />
             )}
           </ul>
-          <div class="my-8 text-center">
-            <LinkButton href="/posts/">
+          <div class="mt-12 sm:mt-16">
+            <LinkButton href="/posts/" class="outline-button">
               All Posts
               <IconArrowRight class="inline-block rtl:-rotate-180" />
             </LinkButton>

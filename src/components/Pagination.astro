@@ -3,37 +3,42 @@ import type { Page } from "astro";
 import type { CollectionEntry } from "astro:content";
 import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import LinkButton from "./LinkButton.astro";
 
 export interface Props {
   page: Page<CollectionEntry<"blog">>;
 }
-
 const { page } = Astro.props;
 ---
 
 {
   page.lastPage > 1 && (
-    <nav class="mt-auto mb-8 flex justify-center" aria-label="Pagination">
-      <LinkButton
-        disabled={!page.url.prev}
-        href={page.url.prev as string}
-        class:list={["me-4 select-none", { "opacity-50": !page.url.prev }]}
-        ariaLabel="Previous"
-      >
-        <IconArrowLeft class="inline-block rtl:rotate-180" />
-        Prev
-      </LinkButton>
-      {page.currentPage} / {page.lastPage}
-      <LinkButton
-        disabled={!page.url.next}
-        href={page.url.next as string}
-        class:list={["ms-4 select-none", { "opacity-50": !page.url.next }]}
-        ariaLabel="Next"
-      >
-        Next
-        <IconArrowRight class="inline-block rtl:rotate-180" />
-      </LinkButton>
+    <nav
+      class="mx-auto my-16 w-full max-w-app px-4 sm:my-24"
+      aria-label="Pagination"
+    >
+      <div class="relative px-12 py-2 text-center">
+        {page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="absolute start-0 top-1/2 outline-button size-10 -translate-y-1/2 !p-2"
+            aria-label="Previous"
+          >
+            <IconArrowLeft class="size-5 rtl:rotate-180" />
+          </a>
+        )}
+        <span class="text-base" aria-current="page">
+          Page {page.currentPage} of {page.lastPage}
+        </span>
+        {page.url.next && (
+          <a
+            href={page.url.next}
+            class="absolute end-0 top-1/2 outline-button size-10 -translate-y-1/2 !p-2"
+            aria-label="Next"
+          >
+            <IconArrowRight class="size-5 rtl:rotate-180" />
+          </a>
+        )}
+      </div>
     </nav>
   )
 }
