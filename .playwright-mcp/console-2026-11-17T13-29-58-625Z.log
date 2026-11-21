@@ -1,0 +1,16 @@
+[      79ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[     406ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[    1059ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[   23266ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[   33674ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/astro_virtual-modules_transitions-events__js.js?v=77598bff:1
+[   33678ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/astro_virtual-modules_transitions-swap-functions__js.js?v=575d04c6:1
+[   33687ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/astro-IQQQXCO3.js?v=99bb8df2:1
+[   33688ms] Failed to fetch dynamically imported module: http://127.0.0.1:4325/node_modules/.vite/deps/astro-IQQQXCO3.js?v=99bb8df2
+[   33688ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/audit-UWCKQAAX.js?v=99bb8df2:1
+[   33688ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/settings-K4OHAGC2.js?v=99bb8df2:1
+[   33689ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/xray-XH6VIXDC.js?v=99bb8df2:1
+[   33689ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/ui-library-EVFCBMCE.js?v=99bb8df2:1
+[   33690ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/node_modules/.vite/deps/toolbar-2H5PSQQU.js?v=99bb8df2:1
+[   33820ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[   34574ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://127.0.0.1:4325/@id/astro/runtime/client/dev-toolbar/entrypoint.js:1
+[   40702ms] [LOG] [vite] server connection lost. Polling for restart... @ http://127.0.0.1:4325/@vite/client:1599

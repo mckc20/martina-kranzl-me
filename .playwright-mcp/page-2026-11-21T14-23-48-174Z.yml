@@ -1,0 +1,102 @@
+- generic [ref=f8e2]:
+  - banner [ref=f8e3]:
+    - link "Skip to content" [ref=f8e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation "Primary navigation" [ref=f8e5]:
+      - link "martina kranzl home" [ref=f8e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=f8e7]: martina kranzl
+      - list [ref=f8e8]:
+        - listitem [ref=f8e9]:
+          - link "Home" [ref=f8e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=f8e11]:
+          - link "Photos" [ref=f8e12] [cursor=pointer]:
+            - /url: /photos/
+        - listitem [ref=f8e13]:
+          - link "Blog" [ref=f8e14] [cursor=pointer]:
+            - /url: /blog/
+      - generic [ref=f8e15]:
+        - link "Search" [ref=f8e16] [cursor=pointer]:
+          - /url: /search/
+        - button "Switch to dark mode" [ref=f8e21] [cursor=pointer]
+  - main [ref=f8e29]:
+    - navigation "Photo navigation" [ref=f8e30]:
+      - link "<- Back to Photos" [ref=f8e31] [cursor=pointer]:
+        - /url: /photos/
+      - generic [ref=f8e32]:
+        - link "<- Previous" [ref=f8e33] [cursor=pointer]:
+          - /url: /photos/ring-of-fire/
+        - link "Next ->" [ref=f8e34] [cursor=pointer]:
+          - /url: /photos/fields-of-gold/
+    - article [ref=f8e35]:
+      - link [ref=f8e36]:
+        - /url: /@fs/Users/martina/Nextcloud/develop/projects/martina-kranzl-me/src/assets/blogimages/love-shine-a-light/cover.jpg?origWidth=3024&origHeight=4031&origFormat=jpg
+        - img "Love shine a light" [ref=f8e37]
+      - generic [ref=f8e38]:
+        - paragraph [ref=f8e39]:
+          - time [ref=f8e40]: 5 January 2026
+        - heading "Love shine a light" [level=1] [ref=f8e41]
+        - paragraph [ref=f8e42]: The first sun rays coming trough the window
+        - generic [ref=f8e43]:
+          - figure "— “Love shine a light” von Katrina & The Waves" [ref=f8e44]:
+            - blockquote [ref=f8e45]:
+              - generic [aria-hidden] [ref=f8e46]: “
+              - paragraph [ref=f8e47]: Love shine a light In every corner of the world Let the love light carry Let the love light carry Light up the magic For every boy and girl Let our love shine a light In every corner of the world
+              - text: ”
+            - generic [ref=f8e48]:
+              - text: —
+              - paragraph [ref=f8e50]: “Love shine a light” von Katrina & The Waves
+          - iframe [ref=f8e51]:
+            - generic [ref=f9e1]:
+              - generic [ref=f9e6]:
+                - img "Love Shine a Light - Re-record cover" [ref=f9e9] [cursor=pointer]
+                - button "Play on Spotify" [ref=f9e11] [cursor=pointer]
+                - generic [ref=f9e14]:
+                  - heading [level=1] [ref=f9e15]:
+                    - link "Love Shine a Light - Re-record" [ref=f9e19] [cursor=pointer]:
+                      - /url: https://open.spotify.com/track/2z8pAqNDkjVOzlJg3M3cuO?go=1&sp_cid=4d3489d5cf5d38e8d698fc88b0d5a8b2&utm_source=embed_player_p&utm_medium=desktop
+                  - generic [ref=f9e20]:
+                    - list "Tags" [ref=f9e21]:
+                      - listitem "Preview" [ref=f9e22]
+                    - heading [level=2] [ref=f9e23]:
+                      - link "Katrina & The Waves" [ref=f9e28] [cursor=pointer]:
+                        - /url: https://open.spotify.com/artist/2TzHIUhVpeeDxyJPpQfnV3?go=1&sp_cid=4d3489d5cf5d38e8d698fc88b0d5a8b2
+                  - button "Save on Spotify" [ref=f9e30] [cursor=pointer]
+                - generic [ref=f9e36]:
+                  - button "More" [ref=f9e38] [cursor=pointer]
+                  - button "Play" [ref=f9e42] [cursor=pointer]
+              - alert [ref=f9e45]
+        - list "Subjects" [ref=f8e52]:
+          - listitem [ref=f8e53]:
+            - link "sonnenaufgang" [ref=f8e54] [cursor=pointer]:
+              - /url: /tags/73-6f-6e-6e-65-6e-61-75-66-67-61-6e-67/
+          - listitem [ref=f8e60]:
+            - link "licht" [ref=f8e61] [cursor=pointer]:
+              - /url: /tags/6c-69-63-68-74/
+          - listitem [ref=f8e67]:
+            - link "musik" [ref=f8e68] [cursor=pointer]:
+              - /url: /tags/6d-75-73-69-6b/
+          - listitem [ref=f8e74]:
+            - link "fotoblog" [ref=f8e75] [cursor=pointer]:
+              - /url: /tags/66-6f-74-6f-62-6c-6f-67/
+          - listitem [ref=f8e81]:
+            - link "fotografie" [ref=f8e82] [cursor=pointer]:
+              - /url: /tags/66-6f-74-6f-67-72-61-66-69-65/
+        - generic [ref=f8e88]:
+          - paragraph [ref=f8e89]: 4.25 mm · ƒ/1.8 · 1/765 s · ISO 25
+          - paragraph [ref=f8e90]: Apple · iPhone XS · iPhone XS back dual camera 4.25mm f/1.8
+  - contentinfo [ref=f8e91]:
+    - navigation "Footer navigation" [ref=f8e92]:
+      - link "About" [ref=f8e93] [cursor=pointer]:
+        - /url: /about/
+      - link "RSS" [ref=f8e94] [cursor=pointer]:
+        - /url: /rss.xml
+      - link "Archives" [ref=f8e95] [cursor=pointer]:
+        - /url: /archives/
+      - link "Built with AstroPaper" [ref=f8e96] [cursor=pointer]:
+        - /url: https://github.com/satnaing/astro-paper
+    - paragraph [ref=f8e98]:
+      - text: © 2026
+      - link "Martina Kranzl" [ref=f8e99] [cursor=pointer]:
+        - /url: /

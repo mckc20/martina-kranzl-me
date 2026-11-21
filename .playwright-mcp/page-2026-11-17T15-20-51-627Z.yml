@@ -1,0 +1,49 @@
+- generic [ref=f3e2]:
+  - banner [ref=f3e3]:
+    - link "Skip to content" [ref=f3e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation "Primary navigation" [ref=f3e5]:
+      - link "martina kranzl home" [ref=f3e6] [cursor=pointer]:
+        - /url: /
+      - list [ref=f3e7]:
+        - listitem [ref=f3e8]:
+          - link "Home" [ref=f3e9] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=f3e10]:
+          - link "Photos" [ref=f3e11] [cursor=pointer]:
+            - /url: /photos/
+        - listitem [ref=f3e12]:
+          - link "Blog" [ref=f3e13] [cursor=pointer]:
+            - /url: /blog/
+        - listitem [ref=f3e14]:
+          - link "About" [ref=f3e15] [cursor=pointer]:
+            - /url: /about/
+      - generic [ref=f3e16]:
+        - link "Search" [ref=f3e17] [cursor=pointer]:
+          - /url: /search/
+        - button "Switch to dark mode" [ref=f3e22] [cursor=pointer]
+  - main [ref=f3e30]:
+    - heading "Search" [level=1] [ref=f3e32]
+    - generic [ref=f3e33]:
+      - generic [ref=f3e34]:
+        - paragraph [ref=f3e35]:
+          - strong [ref=f3e36]: DEV mode Warning!
+          - text: You need to build the project at least once to see the search results during development.
+        - code [ref=f3e37]: pnpm run build
+      - search "Search this site" [ref=f3e39]:
+        - textbox "Search" [ref=f3e40]
+        - button "Clear"
+  - contentinfo [ref=f3e41]:
+    - navigation "Footer navigation" [ref=f3e42]:
+      - link "About" [ref=f3e43] [cursor=pointer]:
+        - /url: /about/
+      - link "RSS" [ref=f3e44] [cursor=pointer]:
+        - /url: /rss.xml
+      - link "Archives" [ref=f3e45] [cursor=pointer]:
+        - /url: /archives/
+      - link "Built with AstroPaper" [ref=f3e46] [cursor=pointer]:
+        - /url: https://github.com/satnaing/astro-paper
+    - paragraph [ref=f3e48]:
+      - text: © 2026
+      - link "Martina Kranzl" [ref=f3e49] [cursor=pointer]:
+        - /url: /

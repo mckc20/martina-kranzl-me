@@ -1,0 +1,52 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "Skip to content" [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation "Primary navigation" [ref=e5]:
+      - link "martina kranzl home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: martina kranzl
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Home" [ref=e10] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e11]:
+          - link "Photos" [ref=e12] [cursor=pointer]:
+            - /url: /photos/
+        - listitem [ref=e13]:
+          - link "Blog" [ref=e14] [cursor=pointer]:
+            - /url: /blog/
+        - listitem [ref=e15]:
+          - link "About" [ref=e16] [cursor=pointer]:
+            - /url: /about/
+      - generic [ref=e17]:
+        - link "Search" [ref=e18] [cursor=pointer]:
+          - /url: /search/
+        - button "Switch to dark mode" [ref=e23] [cursor=pointer]
+  - main [ref=e31]:
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: Posts & Annotations
+      - heading "Search" [level=1] [ref=e34]
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - paragraph [ref=e37]:
+          - strong [ref=e38]: DEV mode Warning!
+          - text: You need to build the project at least once to see the search results during development.
+        - code [ref=e39]: pnpm run build
+      - search "Search this site" [ref=e41]:
+        - textbox "Search" [ref=e42]
+        - button "Clear"
+  - contentinfo [ref=e43]:
+    - navigation "Footer navigation" [ref=e44]:
+      - link "About" [ref=e45] [cursor=pointer]:
+        - /url: /about/
+      - link "RSS" [ref=e46] [cursor=pointer]:
+        - /url: /rss.xml
+      - link "Archives" [ref=e47] [cursor=pointer]:
+        - /url: /archives/
+      - link "Built with AstroPaper" [ref=e48] [cursor=pointer]:
+        - /url: https://github.com/satnaing/astro-paper
+    - paragraph [ref=e50]:
+      - text: © 2026
+      - link "Martina Kranzl" [ref=e51] [cursor=pointer]:
+        - /url: /

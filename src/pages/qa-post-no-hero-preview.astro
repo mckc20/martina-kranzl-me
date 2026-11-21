@@ -1,0 +1,8 @@
+---
+import {getEntry} from "astro:content";
+import BlogDetails from "@/layouts/BlogDetails.astro";
+const post=await getEntry("blog","example-post");
+if (!post) throw new Error("Example post not found");
+const withoutHero={...post,data:{...post.data,heroImage:undefined}};
+---
+<BlogDetails post={withoutHero} />

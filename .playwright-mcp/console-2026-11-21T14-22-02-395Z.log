@@ -1,0 +1,2 @@
+[      54ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456:1
+[      59ms] Failed to fetch dynamically imported module: http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456

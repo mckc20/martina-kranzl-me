@@ -1,0 +1,141 @@
+- generic [ref=f5e2]:
+  - banner [ref=f5e3]:
+    - link "Skip to content" [ref=f5e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - navigation "Primary navigation" [ref=f5e5]:
+      - link "martina kranzl home" [ref=f5e6] [cursor=pointer]:
+        - /url: /
+      - list [ref=f5e7]:
+        - listitem [ref=f5e8]:
+          - link "Home" [ref=f5e9] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=f5e10]:
+          - link "Photos" [ref=f5e11] [cursor=pointer]:
+            - /url: /photos/
+        - listitem [ref=f5e12]:
+          - link "Blog" [ref=f5e13] [cursor=pointer]:
+            - /url: /blog/
+        - listitem [ref=f5e14]:
+          - link "About" [ref=f5e15] [cursor=pointer]:
+            - /url: /about/
+      - generic [ref=f5e16]:
+        - link "Search" [ref=f5e17] [cursor=pointer]:
+          - /url: /search/
+        - button "Switch to dark mode" [ref=f5e22] [cursor=pointer]
+  - main [ref=f5e30]:
+    - heading "Archives" [level=1] [ref=f5e32]
+    - list [ref=f5e33]:
+      - listitem [ref=f5e34]:
+        - link "Cyan sky" [ref=f5e35] [cursor=pointer]:
+          - /url: /photos/cyan-sky/
+        - time [ref=f5e36]: 15 November 2026
+        - generic [ref=f5e37]: Photo
+      - listitem [ref=f5e38]:
+        - link "Krone aus Sternen" [ref=f5e39] [cursor=pointer]:
+          - /url: /photos/crown-of-stars/
+        - time [ref=f5e40]: 23 July 2026
+        - generic [ref=f5e41]: Photo
+      - listitem [ref=f5e42]:
+        - link "Flowers from heaven" [ref=f5e43] [cursor=pointer]:
+          - /url: /photos/flower-from-heaven/
+        - time [ref=f5e44]: 23 July 2026
+        - generic [ref=f5e45]: Photo
+      - listitem [ref=f5e46]:
+        - link "Im Geäst" [ref=f5e47] [cursor=pointer]:
+          - /url: /photos/im-geast/
+        - time [ref=f5e48]: 6 July 2026
+        - generic [ref=f5e49]: Photo
+      - listitem [ref=f5e50]:
+        - link "Birkenzauber" [ref=f5e51] [cursor=pointer]:
+          - /url: /photos/birke/
+        - time [ref=f5e52]: 6 May 2026
+        - generic [ref=f5e53]: Photo
+      - listitem [ref=f5e54]:
+        - link "Blätterregen" [ref=f5e55] [cursor=pointer]:
+          - /url: /photos/blaetterregen/
+        - time [ref=f5e56]: 6 May 2026
+        - generic [ref=f5e57]: Photo
+      - listitem [ref=f5e58]:
+        - link "Feuertulpen" [ref=f5e59] [cursor=pointer]:
+          - /url: /photos/feuertulpen/
+        - time [ref=f5e60]: 1 May 2026
+        - generic [ref=f5e61]: Photo
+      - listitem [ref=f5e62]:
+        - link "Ghosts" [ref=f5e63] [cursor=pointer]:
+          - /url: /photos/ghost/
+        - time [ref=f5e64]: 19 April 2026
+        - generic [ref=f5e65]: Photo
+      - listitem [ref=f5e66]:
+        - link "Scarecrow" [ref=f5e67] [cursor=pointer]:
+          - /url: /photos/scarecrow/
+        - time [ref=f5e68]: 18 April 2026
+        - generic [ref=f5e69]: Photo
+      - listitem [ref=f5e70]:
+        - link "The Dark Side" [ref=f5e71] [cursor=pointer]:
+          - /url: /photos/the-dark-side/
+        - time [ref=f5e72]: 18 April 2026
+        - generic [ref=f5e73]: Photo
+      - listitem [ref=f5e74]:
+        - link "Alles im Blick" [ref=f5e75] [cursor=pointer]:
+          - /url: /photos/alles-im-blick/
+        - time [ref=f5e76]: 2 April 2026
+        - generic [ref=f5e77]: Photo
+      - listitem [ref=f5e78]:
+        - link "Mediterranischer Himmel" [ref=f5e79] [cursor=pointer]:
+          - /url: /photos/mediterranischer-himmel/
+        - time [ref=f5e80]: 29 March 2026
+        - generic [ref=f5e81]: Photo
+      - listitem [ref=f5e82]:
+        - link "Ring of Fire" [ref=f5e83] [cursor=pointer]:
+          - /url: /photos/ring-of-fire/
+        - time [ref=f5e84]: 29 March 2026
+        - generic [ref=f5e85]: Photo
+      - listitem [ref=f5e86]:
+        - link "Chasing the light" [ref=f5e87] [cursor=pointer]:
+          - /url: /photos/abendlicht/
+        - time [ref=f5e88]: 4 January 2026
+        - generic [ref=f5e89]: Photo
+      - listitem [ref=f5e90]:
+        - link "Himmelsjäger" [ref=f5e91] [cursor=pointer]:
+          - /url: /blog/himmelsjaeger/
+        - time [ref=f5e92]: 4 January 2026
+        - generic [ref=f5e93]: Blog
+      - listitem [ref=f5e94]:
+        - link "Passing by Fields of Gold" [ref=f5e95] [cursor=pointer]:
+          - /url: /photos/fields-of-gold/
+        - time [ref=f5e96]: 1 July 2025
+        - generic [ref=f5e97]: Photo
+      - listitem [ref=f5e98]:
+        - link "Riders on the Storm" [ref=f5e99] [cursor=pointer]:
+          - /url: /photos/riders-on-the-storm/
+        - time [ref=f5e100]: 1 July 2025
+        - generic [ref=f5e101]: Photo
+      - listitem [ref=f5e102]:
+        - link "Love shine a light" [ref=f5e103] [cursor=pointer]:
+          - /url: /photos/love-shine-a-light/
+        - time [ref=f5e104]: 5 January 2025
+        - generic [ref=f5e105]: Photo
+      - listitem [ref=f5e106]:
+        - link "La Vie en rose" [ref=f5e107] [cursor=pointer]:
+          - /url: /photos/la-vie-en-rose/
+        - time [ref=f5e108]: 29 October 2024
+        - generic [ref=f5e109]: Photo
+      - listitem [ref=f5e110]:
+        - link "Ringelspiel" [ref=f5e111] [cursor=pointer]:
+          - /url: /photos/ringelspiel/
+        - time [ref=f5e112]: 29 October 2024
+        - generic [ref=f5e113]: Photo
+  - contentinfo [ref=f5e114]:
+    - navigation "Footer navigation" [ref=f5e115]:
+      - link "About" [ref=f5e116] [cursor=pointer]:
+        - /url: /about/
+      - link "RSS" [ref=f5e117] [cursor=pointer]:
+        - /url: /rss.xml
+      - link "Archives" [ref=f5e118] [cursor=pointer]:
+        - /url: /archives/
+      - link "Built with AstroPaper" [ref=f5e119] [cursor=pointer]:
+        - /url: https://github.com/satnaing/astro-paper
+    - paragraph [ref=f5e121]:
+      - text: © 2026
+      - link "Martina Kranzl" [ref=f5e122] [cursor=pointer]:
+        - /url: /

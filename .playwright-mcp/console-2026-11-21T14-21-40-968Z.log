@@ -1,0 +1,6 @@
+[     119ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456:1
+[     133ms] Failed to fetch dynamically imported module: http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456
+[   18232ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456:1
+[   18242ms] Failed to fetch dynamically imported module: http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456
+[   18829ms] [ERROR] Failed to load resource: the server responded with a status of 504 (Outdated Optimize Dep) @ http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456:1
+[   18842ms] Failed to fetch dynamically imported module: http://localhost:4321/node_modules/.vite/deps/astro-BKQCAMZY.js?v=5afeb456
