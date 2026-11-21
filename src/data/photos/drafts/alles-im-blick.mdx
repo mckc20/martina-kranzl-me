@@ -1,0 +1,28 @@
+---
+title: Alles im Blick
+pubDatetime: 2026-04-02T11:33:00+02:00
+description: ""
+tags:
+  - tiere
+  - Spanien
+  - fotoblog
+  - fotografie
+ogImage: src/assets/blogimages/alles-im-blick/cover.jpg
+draft: true
+lang: de
+image: "@/assets/blogimages/alles-im-blick/cover.jpg"
+alt: Alles im Blick
+---
+
+import Gallery from "@/components/Gallery.astro";
+
+export const photos = Object.values(
+  import.meta.glob("src/assets/blogimages/alles-im-blick/*.jpg", {
+    eager: true,
+    import: "default",
+  })
+).filter(image => !image.src.includes("/cover."));
+
+<hr />
+<Gallery images={photos} />
+<hr />

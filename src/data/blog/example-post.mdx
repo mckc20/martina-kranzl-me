@@ -1,0 +1,80 @@
+---
+title: A quiet moment at home
+pubDatetime: 2026-11-16T00:00:00+01:00
+# false makes this example visible; change to true to hide it while editing.
+draft: true
+description: An example post about finding a photograph in an ordinary moment.
+introduction: A quiet scene, a familiar companion and a little time to notice the details. This example shows how photographs and writing can share the same page.
+heroImage: ../../assets/blogimages/lucky/lucky-zimmer.jpg
+heroImageAlt: A tan dog resting on a black-and-white chequered floor beside a colourful cushion.
+heroImagePosition: "50% 70%"
+heroBackLinkColor: black
+ogImage: ../../assets/blogimages/lucky/lucky-zimmer.jpg
+tags:
+  - photography
+  - everyday life
+lang: en
+---
+
+import PostImage from "@/components/PostImage.astro";
+import SongQuote from "@/components/SongQuote.astro";
+import Quote from "@/components/Quote.astro";
+import luckyOutside from "../../assets/blogimages/lucky/cover.jpg";
+
+## The small things
+
+<PostImage
+  src={luckyOutside}
+  alt="A tan dog lying in the grass and looking up at the camera"
+  align="right"
+  width="35%"
+  caption="A little company, and a moment to pause."
+/>
+
+Not every photograph needs a special occasion. Sometimes a quiet scene at home
+is enough: a dog stretched out on the floor, a patch of light, the contrast between
+colourful fabric and black-and-white tiles.
+
+This is where you could write about what caught your eye, how you made the
+photograph, or what the moment means to you. There is room for a story beyond
+the image: the sounds around you, a thought that stayed with you, or a small
+detail you might otherwise have forgotten.
+
+The photograph beside these paragraphs is part of the text's flow. On a wider
+screen the writing wraps around it, leaving the image close to the words it
+belongs with. On a phone it sits above the text so neither has to squeeze
+into a narrow column.
+
+This is still an example post: replace the paragraphs with your own writing.
+You can make the image wider or narrower, move it to the left, or let it occupy
+a line of its own. The photograph keeps its natural proportions as its width
+changes.
+
+> A photograph can be a little reminder to pay attention.
+
+<Quote>
+  A photograph can be a little reminder to pay attention.
+  <span slot="attribution">Your own attribution, with optional links.</span>
+</Quote>
+
+<SongQuote>
+  Put a short song quote here.
+  <span slot="attribution">
+    From <a href="https://open.spotify.com/">Example song</a> by{" "}
+    <a href="https://open.spotify.com/">Example artist</a> — a song for this
+    moment.
+  </span>
+</SongQuote>
+
+## Make this post your own
+
+- Change the text between the two `---` lines to edit the title, date and cover.
+- Edit `introduction` to change the larger paragraph beneath the title.
+- Write the main post below the imports, using ordinary Markdown.
+- Use `##` for a heading, `**text**` for bold and `*text*` for italics.
+- Change `align="right"` to `align="left"` or `align="center"` to move the image.
+- Change `width="35%"` to another percentage, or use `width={280}` for pixels.
+- Keep `draft: false` to see the post on the site, or use `draft: true` to hide it.
+
+You can also add [a link to another page](/about/) or keep writing in a new
+paragraph. No image imports or special components are needed for a cover photo.
