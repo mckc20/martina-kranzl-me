@@ -1,121 +1,84 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
-import PhotoblogGrid from "@/components/PhotoblogGrid.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
-
-const posts = await getCollection("blog");
-
-const NEW_POST_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
-
-const sortedPosts = getSortedPosts(posts);
-const regularPosts = sortedPosts.filter(
-  ({ data }) => !data.tags.includes("fotoblog")
-);
-const latestRegularPost = [...regularPosts].sort(
-  (a, b) => b.data.pubDatetime.getTime() - a.data.pubDatetime.getTime()
-)[0];
-const latestRegularPostAge = latestRegularPost
-  ? Date.now() - latestRegularPost.data.pubDatetime.getTime()
-  : Number.POSITIVE_INFINITY;
-const showLatestRegularPost =
-  latestRegularPostAge >= 0 && latestRegularPostAge <= NEW_POST_WINDOW_MS;
-const remainingRegularPosts = showLatestRegularPost
-  ? regularPosts.filter(post => post.id !== latestRegularPost.id)
-  : regularPosts;
-const photoblogPosts = sortedPosts.filter(({ data }) =>
-  data.tags.includes("fotoblog")
-);
+import PhotoGrid from "@/components/PhotoGrid.astro";
+import BlogCard from "@/components/BlogCard.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import TagLinks from "@/components/TagLinks.astro";
+import { photos, blog, allEntries } from "@/utils/content";
+import { tagsFor } from "@/utils/content/tags";
+const recentPhotos = (await photos("publication")).slice(0, 4);
+const recentBlog = (await blog()).slice(0, 3);
+const subjects = tagsFor(await allEntries()).map(tag => tag.label);
 ---
 
 <Layout>
   <Header />
-  <main id="main-content" data-layout="index">
-    <section id="hero" class="mb-16 sm:mb-24">
-      <h1 class="font-sans text-xl leading-relaxed font-normal">
-        Willkommen auf meinem Blog. Hier teile ich Fotos und Zeichnungen aus
-        Wien, von Reisen und aus dem Alltag.
-      </h1>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex flex-col sm:flex-row sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
+  <main id="main-content" class="shell home">
+    <div class="home-text app-prose">
+      <!-- Edit your text here. Use <p> for paragraphs and <h1>–<h6> for headings. -->
+      <h3>Hello and welcome to my web!</h4>
+      <p>Hi, I'm Martina! I love reading, art and photography. I'm a high school student and I live in Vienna.</p>
+    </div>
+    <div class="home-sections">
+      <section class="home-photos">
+        <SectionHeading
+          title="Recent Photos"
+          href="/photos/"
+          label="All photos ->"
+        /><PhotoGrid photos={recentPhotos} compact square />
+      </section>
+      <section class="home-blog">
+        <SectionHeading
+          title="From my blog"
+          href="/blog/"
+          label="All posts ->"
+        />{recentBlog.map(post => <BlogCard {post} />)}
+      </section>
+    </div>
+    <section class="subjects">
+      <p class="eyebrow">Explore by subject</p><TagLinks tags={subjects} />
     </section>
-
-    {
-      showLatestRegularPost && latestRegularPost && (
-        <>
-          <section id="latest-post" class="mb-16 sm:mb-24">
-            <h2 class="section-title">Latest Post</h2>
-            <ul>
-              <Card variant="h3" {...latestRegularPost} />
-            </ul>
-          </section>
-        </>
-      )
-    }
-
-    {
-      photoblogPosts.length > 0 && (
-        <>
-          <section id="photoblog" class="mb-16 sm:mb-24">
-            <h2 class="section-title">Photoblog</h2>
-            <PhotoblogGrid
-              posts={photoblogPosts.slice(0, SITE.photoblogPostsPerIndex)}
-            />
-            <div class="mt-12 sm:mt-16">
-              <LinkButton href="/tags/fotoblog/" class="outline-button">
-                Browse more photos
-                <IconArrowRight class="inline-block rtl:-rotate-180" />
-              </LinkButton>
-            </div>
-          </section>
-        </>
-      )
-    }
-
-    {
-      remainingRegularPosts.length > 0 && (
-        <section id="recent-posts" class="mb-16 sm:mb-24">
-          <h2 class="section-title">Posts</h2>
-          <ul>
-            {remainingRegularPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-          <div class="mt-12 sm:mt-16">
-            <LinkButton href="/posts/" class="outline-button">
-              All Posts
-              <IconArrowRight class="inline-block rtl:-rotate-180" />
-            </LinkButton>
-          </div>
-        </section>
-      )
-    }
   </main>
   <Footer />
 </Layout>
-
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset?.layout;
-    if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
+<style>
+  .home-text {
+    margin-bottom: 64px;
+  }
+  .home-text :global(> :first-child) {
+    margin-top: 0;
+  }
+  .home-text :global(> :last-child) {
+    margin-bottom: 0;
+  }
+  .home-sections {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 64px;
+  }
+  .subjects {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+  @media (min-width: 768px) {
+    .home-photos :global(.photo-tile:nth-child(n + 4)) {
+      display: none;
     }
-  });
-</script>
+  }
+  @media (max-width: 767px) {
+    .home-text {
+      margin-bottom: 48px;
+    }
+    .home-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .subjects {
+      margin-top: 48px;
+    }
+  }
+</style>

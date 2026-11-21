@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { entryUrl, entryTitle } from "@/utils/content";
+interface Props {
+  photo: CollectionEntry<"photos">;
+  square?: boolean;
+}
+const { photo, square = false } = Astro.props;
+---
+
+<a
+  class:list={["photo-tile", { square }]}
+  href={entryUrl(photo)}
+  aria-label={entryTitle(photo)}
+>
+  <Image
+    src={photo.data.image}
+    alt={photo.data.alt ?? photo.data.caption ?? photo.data.title ?? ""}
+    widths={[320, 480, 720, 960]}
+    sizes="(max-width:479px) calc(100vw - 32px), (max-width:767px) 48vw, (max-width:1199px) 31vw, 350px"
+    loading="lazy"
+  />
+</a>
+<style>
+  .photo-tile {
+    display: block;
+    min-width: 0;
+    align-self: start;
+    overflow: hidden;
+  }
+  .photo-tile img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 220ms ease-out;
+  }
+  .photo-tile:not(.square) {
+    border-radius: 6px;
+  }
+  .photo-tile.square img {
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  @media (hover: hover) {
+    .photo-tile:hover img {
+      transform: scale(1.04);
+    }
+  }
+  .photo-tile:focus-visible img {
+    transform: scale(1.04);
+  }
+  .photo-tile:focus-visible {
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .photo-tile img {
+      transition: none;
+    }
+    .photo-tile:hover img,
+    .photo-tile:focus-visible img {
+      transform: none;
+    }
+  }
+</style>

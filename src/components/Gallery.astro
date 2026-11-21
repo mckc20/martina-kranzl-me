@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import PhotoPreview from "./PhotoPreview.astro";
 
 export interface Props {
   images: ImageMetadata[];
@@ -15,16 +16,12 @@ function getFilename(src: string): string {
 }
 ---
 
-<div
-  class="gallery-wrapper not-prose -mx-4 sm:-mx-8 md:-mx-16"
-  data-gallery
->
+<PhotoPreview />
+
+<div class="gallery-wrapper not-prose" data-gallery>
   {
     layout === "grid" ? (
-      <div
-        class="grid grid-cols-2 gap-1"
-        style={`--gallery-cols: ${columns}`}
-      >
+      <div class="grid grid-cols-2 gap-1" style={`--gallery-cols: ${columns}`}>
         {images.map(img => {
           const filename = getFilename(img.src);
           const caption = captions[filename];
@@ -41,7 +38,7 @@ function getFilename(src: string): string {
               <Image
                 src={img}
                 alt={caption ?? ""}
-                class="!m-0 !border-0 h-full w-full object-cover aspect-square"
+                class="!m-0 aspect-square h-full w-full !border-0 object-cover"
                 widths={[320, 640, 960]}
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
               />
@@ -68,7 +65,7 @@ function getFilename(src: string): string {
               <Image
                 src={img}
                 alt={caption ?? ""}
-                class="!m-0 !border-0 w-full"
+                class="!m-0 w-full !border-0"
                 widths={[320, 640, 960]}
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
               />
@@ -87,52 +84,3 @@ function getFilename(src: string): string {
     }
   }
 </style>
-
-<script>
-  import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import "photoswipe/style.css";
-
-  function initGalleries() {
-    document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(gallery => {
-      if (gallery.dataset.pswpInit) return;
-      gallery.dataset.pswpInit = "true";
-
-      const lightbox = new PhotoSwipeLightbox({
-        gallery,
-        children: "a[data-pswp-width]",
-        pswpModule: () => import("photoswipe"),
-      });
-
-      lightbox.on("uiRegister", () => {
-        lightbox.pswp?.ui?.registerElement({
-          name: "caption",
-          order: 9,
-          isButton: false,
-          appendTo: "root",
-          html: "",
-          onInit: (el) => {
-            el.style.cssText =
-              "position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,.5));color:#fff;font-size:14px;text-align:center;pointer-events:none;";
-
-            lightbox.pswp?.on("change", () => {
-              const caption =
-                lightbox.pswp?.currSlide?.data.element?.getAttribute(
-                  "data-caption"
-                ) ?? "";
-              el.textContent = caption;
-              el.style.display = caption ? "block" : "none";
-            });
-          },
-        });
-      });
-
-      lightbox.init();
-    });
-  }
-
-  // Init on first load
-  initGalleries();
-
-  // Re-init after view transitions
-  document.addEventListener("astro:after-swap", initGalleries);
-</script>

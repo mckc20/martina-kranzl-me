@@ -1,0 +1,46 @@
+---
+import { entryUrl } from "@/utils/content";
+import type { CollectionEntry } from "astro:content";
+interface Props {
+  previous?: CollectionEntry<"photos">;
+  next?: CollectionEntry<"photos">;
+}
+const { previous, next } = Astro.props;
+---
+
+<nav aria-label="Photo navigation" class="photo-navigation">
+  <a href="/photos/">&lt;- Back to Photos</a><div>
+    {
+      previous && (
+        <a href={entryUrl(previous)} rel="prev">
+          &lt;- Previous
+        </a>
+      )
+    }{
+      next && (
+        <a href={entryUrl(next)} rel="next">
+          Next -&gt;
+        </a>
+      )
+    }
+  </div>
+</nav>
+<style>
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    font-size: var(--text-sm);
+  }
+  nav div {
+    display: flex;
+    gap: 24px;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>

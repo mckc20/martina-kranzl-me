@@ -1,0 +1,27 @@
+---
+import { photos } from "@/utils/content";
+import { tagsFor } from "@/utils/content/tags";
+import Listing from "@/layouts/Listing.astro";
+import PhotoGrid from "@/components/PhotoGrid.astro";
+export async function getStaticPaths() {
+  const entries = await photos();
+  return tagsFor(entries).map(tag => ({
+    params: { tag: tag.slug },
+    props: {
+      label: tag.label,
+      entries: entries.filter(entry => entry.data.tags.includes(tag.label)),
+    },
+  }));
+}
+const { label, entries } = Astro.props;
+---
+
+<Listing
+  title={label}
+  base={`/photos/tags/${Astro.params.tag}/`}
+  current={1}
+  total={Math.ceil(entries.length / 24)}
+  photo
+  selected={Astro.params.tag}
+  ><PhotoGrid photos={entries.slice(0, 24)} /></Listing
+>

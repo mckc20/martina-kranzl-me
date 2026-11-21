@@ -1,33 +1,65 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400;1,700&family=Literata:opsz,wght@7..72,400..700&display=swap");
 @import "tailwindcss";
 @import "./typography.css";
 
+@font-face {
+  font-family: "Literata Variable";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("@fontsource-variable/literata/files/literata-latin-opsz-normal.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Literata Variable";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("@fontsource-variable/literata/files/literata-latin-opsz-italic.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("@fontsource-variable/inter/files/inter-latin-wght-normal.woff2")
+    format("woff2");
+}
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root,
 html[data-theme="light"] {
-  --background: #f2f1ec;
-  --foreground: #171717;
-  --accent: #171717;
-  --accent-secondary: #575753;
-  --accent-highlight: #575753;
-  --muted: #e5e4df;
-  --border: #d0cfca;
-  --text-subtle: #64645f;
+  --background: #f7f7f7;
+  --foreground: #353535;
+  --accent: #505050;
+  --accent-secondary: #626262;
+  --accent-highlight: #777777;
+  --muted: #e5e5e5;
+  --border: #d0d0d0;
+  --text-subtle: #666666;
 }
 
 html[data-theme="dark"] {
-  --background: #171717;
-  --foreground: #f2f1ec;
-  --accent: #f2f1ec;
-  --accent-secondary: #c4c3be;
-  --accent-highlight: #c4c3be;
+  --background: #1f1f1f;
+  --foreground: #f7f7f7;
+  --accent: #d0d0d0;
+  --accent-secondary: #c4c4c4;
+  --accent-highlight: #c4c4c4;
   --muted: #292929;
-  --border: #40403e;
-  --text-subtle: #b4b3ae;
+  --border: #404040;
+  --text-subtle: #b4b4b4;
 }
 
 @theme inline {
+  --text-xs: 0.65625rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: 0.9375rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.25rem;
+  --text-3xl: 1.5rem;
+  --text-4xl: 1.75rem;
+  --text-9xl: 6rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
@@ -36,8 +68,8 @@ html[data-theme="dark"] {
   --color-muted: var(--muted);
   --color-border: var(--border);
   --color-text-subtle: var(--text-subtle);
-  --font-sans: "Cormorant Garamond", Georgia, serif;
-  --font-serif: "Literata", Georgia, serif;
+  --font-sans: "Inter Variable", Arial, sans-serif;
+  --font-serif: "Literata Variable", Georgia, serif;
 }
 
 @layer base {
@@ -50,7 +82,7 @@ html[data-theme="dark"] {
     @apply overflow-y-scroll scroll-smooth;
   }
   body {
-    @apply flex min-h-svh flex-col bg-background font-sans text-xl leading-relaxed text-foreground selection:bg-accent-secondary/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-sans text-base leading-relaxed text-foreground selection:bg-accent selection:text-background;
   }
   h1,
   h2,
@@ -68,14 +100,10 @@ html[data-theme="dark"] {
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
-  section:not(.pswp *, .archive-year),
-  footer {
-    @apply mx-auto max-w-app px-4;
-  }
 }
 
 @utility max-w-app {
-  @apply max-w-[50rem];
+  @apply max-w-[70rem];
 }
 
 .active-nav {
@@ -119,4 +147,129 @@ html[data-theme="dark"] {
 
 @utility row-title {
   @apply font-serif text-2xl leading-snug font-normal break-words decoration-dashed decoration-1 underline-offset-4 group-hover:underline group-focus-visible:underline;
+}
+
+/* One outer frame controls the margins of every page, including its header and footer. */
+.site-frame {
+  --page-gutter: clamp(48px, 10vw, 160px);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: 800px;
+  min-height: 100svh;
+  margin-inline: auto;
+}
+.shell,
+.reading {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+main {
+  flex: 1;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-optical-sizing: auto;
+}
+.eyebrow {
+  font-size: 0.65625rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+.listing-heading {
+  margin-bottom: 32px;
+}
+.listing-heading h1 {
+  font-style: italic;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  margin-top: 12px;
+}
+.subject-nav,
+.tag-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.tag-links {
+  margin-top: 24px;
+}
+.subject-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.71875rem;
+}
+.subject-nav a:hover,
+.subject-nav .selected {
+  background: var(--muted);
+  border-color: var(--accent);
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 48px;
+  font-size: var(--text-sm);
+}
+.pagination a {
+  color: var(--accent);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.pagination span {
+  padding-block: 10px;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-sm);
+  margin-bottom: 24px;
+}
+.article-title {
+  font-size: 2.25rem;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.article-date {
+  display: block;
+  color: var(--text-subtle);
+  font-size: var(--text-sm);
+  margin-bottom: 32px;
+}
+.app-prose {
+  max-width: none;
+  line-height: 1.8;
+}
+.app-prose img {
+  height: auto;
+  max-width: 100%;
+}
+.app-prose figure {
+  margin-inline: 0;
+}
+@media (max-width: 767px) {
+  .article-title {
+    font-size: var(--text-4xl);
+  }
+  .listing-heading h1 {
+    font-style: italic;
+    font-size: 1.875rem;
+  }
+}
+body {
+  overflow-wrap: break-word;
 }

@@ -1,0 +1,18 @@
+---
+import { blog } from "@/utils/content";
+import Details from "@/layouts/BlogDetails.astro";
+export async function getStaticPaths() {
+  const entries = await blog();
+  return entries.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      post: entry,
+      previous: entries[index - 1],
+      next: entries[index + 1],
+    },
+  }));
+}
+const props = Astro.props;
+---
+
+<Details {...props} />

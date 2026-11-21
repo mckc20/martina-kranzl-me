@@ -1,58 +1,141 @@
 ---
-import { getCollection } from "astro:content";
-import type { GetStaticPathsOptions } from "astro";
-import Main from "@/layouts/Main.astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Card from "@/components/Card.astro";
-import PhotoblogGrid from "@/components/PhotoblogGrid.astro";
-import Pagination from "@/components/Pagination.astro";
-import getUniqueTags from "@/utils/getUniqueTags";
-import getPostsByTag from "@/utils/getPostsByTag";
-import { SITE } from "@/config";
-
-export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const posts = await getCollection("blog");
-  const tags = getUniqueTags(posts);
-
-  return tags.flatMap(({ tag, tagName }) => {
-    const tagPosts = getPostsByTag(posts, tag);
-    const isPhotoblog = tag === "fotoblog" || tag === "fotografie";
-
-    return paginate(tagPosts, {
-      params: { tag },
-      props: { tagName },
-      pageSize: isPhotoblog ? SITE.photoblogPostsPerPage : SITE.postPerPage,
-    });
+import Listing from "@/layouts/Listing.astro";
+import PhotoGrid from "@/components/PhotoGrid.astro";
+import BlogList from "@/components/BlogList.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { allEntries, photos } from "@/utils/content";
+import { tagsFor, tagSlug } from "@/utils/content/tags";
+import { slugifyStr } from "@/utils/slugify";
+export async function getStaticPaths() {
+  const entries = await allEntries();
+  const galleryPhotos = await photos();
+  const tags = tagsFor(entries);
+  // Preserve every old tag URL. Ambiguous old slugs show all matching exact labels.
+  const aliases = [...new Set(tags.map(tag => slugifyStr(tag.label)))];
+  return [
+    ...tags.map(tag => ({ slug: tag.slug, labels: [tag.label] })),
+    ...aliases.map(slug => ({
+      slug,
+      labels: tags
+        .filter(tag => slugifyStr(tag.label) === slug)
+        .map(tag => tag.label),
+    })),
+  ].flatMap(tag => {
+    const tagged = entries.filter(entry =>
+      entry.data.tags.some(label => tag.labels.includes(label))
+    );
+    const taggedPhotos = galleryPhotos.filter(entry =>
+      entry.data.tags.some(label => tag.labels.includes(label))
+    );
+    const taggedPosts = tagged.filter(entry => entry.collection === "blog");
+    const postsPerPage = 10;
+    const total = Math.max(1, Math.ceil(taggedPosts.length / postsPerPage));
+    return Array.from({ length: total }, (_, index) => ({
+      params: {
+        tag: tag.slug,
+        page: index === 0 ? undefined : String(index + 1),
+      },
+      props: {
+        labels: tag.labels,
+        photoCount: taggedPhotos.length,
+        postCount: taggedPosts.length,
+        previewPhotos: taggedPhotos.slice(0, 3),
+        photoTags: tag.labels.filter(label =>
+          taggedPhotos.some(entry => entry.data.tags.includes(label))
+        ),
+        subjectPosts: taggedPosts.slice(
+          index * postsPerPage,
+          (index + 1) * postsPerPage
+        ),
+        current: index + 1,
+        total,
+      },
+    }));
   });
 }
-
-const params = Astro.params;
-const { tag } = params;
-const { page, tagName } = Astro.props;
-
-const isPhotoblogTag = tag === "fotoblog" || tag === "fotografie";
+const {
+  labels,
+  previewPhotos,
+  photoTags,
+  subjectPosts,
+  current,
+  total,
+  photoCount,
+  postCount,
+} = Astro.props;
+const galleryLinks = photoTags.map(label => ({
+  label,
+  href: "/photos/tags/" + tagSlug(label) + "/",
+}));
+const countLabel = (count: number, noun: string) =>
+  String(count) + " " + noun + (count === 1 ? "" : "s");
+const summary = [
+  photoCount > 0 ? countLabel(photoCount, "photo") : null,
+  postCount > 0 ? countLabel(postCount, "post") : null,
+]
+  .filter(value => value !== null)
+  .join(" · ");
 ---
 
-<Layout title={`Tag: ${tagName} | ${SITE.title}`}>
-  <Header />
-  <Main
-    pageTitle={[`Tag:`, `${tagName}`]}
-    titleTransition={tag}
-    pageDesc={`All the articles with the tag "${tagName}".`}
-  >
-    <h1 slot="title" transition:name={tag}>{`Tag:${tag}`}</h1>
-    {isPhotoblogTag ? (
-      <PhotoblogGrid posts={page.data} />
-    ) : (
-      <ul>
-        {page.data.map(data => <Card {...data} />)}
-      </ul>
-    )}
-  </Main>
+<Listing
+  title={labels.join(" / ")}
+  base={`/tags/${Astro.params.tag}/`}
+  {current}
+  {total}
+  {summary}
+  eyebrow="Explore by subject"
+  pageSegment=""
+>
+  {
+    previewPhotos.length > 0 && (
+      <section
+        class="subject-section subject-photo-preview"
+        aria-label="Photos"
+      >
+        <SectionHeading
+          title="Photos"
+          href={galleryLinks.length === 1 ? galleryLinks[0].href : undefined}
+          label={galleryLinks.length === 1 ? "All photos ->" : undefined}
+        />
+        {galleryLinks.length > 1 && (
+          <nav
+            class="subject-gallery-links"
+            aria-label="Filtered photo galleries"
+          >
+            {galleryLinks.map(link => (
+              <a href={link.href}>{"All photos: " + link.label + " ->"}</a>
+            ))}
+          </nav>
+        )}
+        <PhotoGrid photos={previewPhotos} compact square />
+      </section>
+    )
+  }
+  {
+    subjectPosts.length > 0 && (
+      <section class="subject-section" aria-label="Posts">
+        <SectionHeading title="Posts" />
+        <BlogList posts={subjectPosts} />
+      </section>
+    )
+  }
+</Listing>
 
-  <Pagination {page} />
-
-  <Footer noMarginTop={page.lastPage > 1} />
-</Layout>
+<style>
+  .subject-section + .subject-section {
+    margin-top: 64px;
+  }
+  .subject-gallery-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    font-size: var(--text-sm);
+    color: var(--accent);
+  }
+  @media (max-width: 767px) {
+    .subject-photo-preview :global(.photo-tile:nth-child(n + 3)) {
+      display: none;
+    }
+  }
+</style>

@@ -1,76 +1,47 @@
 ---
-import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import Card from "@/components/Card.astro";
-import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
-import { formatGermanMonth } from "@/utils/formatDate";
-import { SITE } from "@/config";
-
-// Redirect to 404 page if `showArchives` config is false
-if (!SITE.showArchives) {
-  return Astro.redirect("/404");
-}
-
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+import Listing from "@/layouts/Listing.astro";
+import { allEntries, entryUrl, entryTitle } from "@/utils/content";
+import { formatGermanDate as formatDate } from "@/utils/formatDate";
+const entries = await allEntries();
 ---
 
-<Layout title={`Archives | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="Archives" pageDesc="All the articles I've archived.">
+<Listing title="Archives" base="/archives/" current={1} total={1}>
+  <div slot="heading" class="listing-heading">
+    <h1>Archives</h1>
+  </div>
+  <ul class="archive-list">
     {
-      Object.entries(
-        getPostsByGroupCondition(posts, post =>
-          post.data.pubDatetime.getFullYear()
-        )
-      )
-        .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-        .map(([year, yearGroup]) => (
-          <section class="archive-year mb-16 last:mb-0 sm:mb-24">
-            <h2 class="section-title">
-              {year}{" "}
-              <span class="text-base text-text-subtle">
-                ({yearGroup.length})
-              </span>
-            </h2>
-            {Object.entries(
-              getPostsByGroupCondition(
-                yearGroup,
-                post => post.data.pubDatetime.getMonth() + 1
-              )
-            )
-              .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                <div class="mb-12 last:mb-0 sm:mb-16">
-                  <h3 class="mb-8 text-xl font-bold">
-                    <span>{formatGermanMonth(Number(month))}</span>
-                    <span class="text-base text-text-subtle">
-                      {" "}
-                      ({monthGroup.length})
-                    </span>
-                  </h3>
-                  <ul class="min-w-0 flex-1">
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          Math.floor(
-                            new Date(b.data.pubDatetime).getTime() / 1000
-                          ) -
-                          Math.floor(
-                            new Date(a.data.pubDatetime).getTime() / 1000
-                          )
-                      )
-                      .map(data => (
-                        <Card variant="h3" {...data} />
-                      ))}
-                  </ul>
-                </div>
-              ))}
-          </section>
-        ))
+      entries.map(entry => (
+        <li>
+          <>
+            <a href={entryUrl(entry)}>{entryTitle(entry)}</a>
+            <time datetime={entry.data.pubDatetime.toISOString()}>
+              {formatDate(entry.data.pubDatetime)}
+            </time>
+            <span>{entry.collection === "photos" ? "Photo" : "Blog"}</span>
+          </>
+        </li>
+      ))
     }
-  </Main>
-  <Footer />
-</Layout>
+  </ul>
+</Listing>
+<style>
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    padding-block: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  li a {
+    flex: 1 1 45%;
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+  }
+  time,
+  span {
+    font-size: var(--text-sm);
+    color: var(--text-subtle);
+  }
+</style>

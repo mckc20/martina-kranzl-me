@@ -8,9 +8,9 @@ export interface Props {
 }
 ---
 
-<footer class="w-full pt-12 pb-10 sm:pt-24 sm:pb-14">
+<footer class="shell w-full pt-12 pb-10 sm:pt-24 sm:pb-14">
   <nav
-    class="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-xl"
+    class="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-sm"
     aria-label="Footer navigation"
   >
     <a href="/about/" class="decoration-1 underline-offset-2 hover:underline"
@@ -19,6 +19,7 @@ export interface Props {
     <a href="/rss.xml" class="decoration-1 underline-offset-2 hover:underline"
       >RSS</a
     >
+    <a href="/archives/">Archives</a>
     <a
       href="https://github.com/satnaing/astro-paper"
       class="decoration-1 underline-offset-2 hover:underline"
@@ -26,7 +27,7 @@ export interface Props {
     >
   </nav>
   <div
-    class="flex flex-col gap-4 border-t border-dashed border-foreground pt-6 text-xl sm:flex-row-reverse sm:items-center sm:justify-between"
+    class="flex flex-col gap-4 border-t border-solid border-foreground pt-6 text-sm sm:flex-row-reverse sm:items-center sm:justify-between"
   >
     {
       SOCIALS.length > 0 && (

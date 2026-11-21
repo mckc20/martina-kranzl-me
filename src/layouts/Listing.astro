@@ -1,0 +1,102 @@
+---
+import Layout from "./Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { photos } from "@/utils/content";
+import { tagsFor } from "@/utils/content/tags";
+interface Props {
+  title: string;
+  base: string;
+  current: number;
+  total: number;
+  photo?: boolean;
+  selected?: string;
+  pageSegment?: string;
+  eyebrow?: string;
+  summary?: string;
+}
+const {
+  title,
+  base,
+  current,
+  total,
+  photo = false,
+  selected,
+  pageSegment = "page/",
+  eyebrow,
+  summary,
+} = Astro.props;
+const tags = photo ? tagsFor(await photos()) : [];
+---
+
+<Layout
+  title={`${title}${current > 1 ? ` · Page ${current}` : ""} | Martina Kranzl`}
+>
+  <Header />
+  <main id="main-content" class="shell">
+    <slot name="heading">
+      <div class="listing-heading">
+        <p class="eyebrow">
+          {eyebrow ?? (photo ? "Gallery" : "Posts & Annotations")}
+        </p><h1>{title}</h1>
+        {summary && <p class="listing-summary">{summary}</p>}
+      </div>
+    </slot>
+    {
+      photo && (
+        <nav aria-label="Photo subjects" class="subject-nav">
+          <a
+            class:list={{ selected: !selected }}
+            href="/photos/"
+            aria-current={!selected ? "page" : undefined}
+          >
+            All
+          </a>
+          {tags.map(tag => (
+            <a
+              class:list={{ selected: selected === tag.slug }}
+              aria-current={selected === tag.slug ? "page" : undefined}
+              href={`/photos/tags/${tag.slug}/`}
+            >
+              {tag.label}
+            </a>
+          ))}
+        </nav>
+      )
+    }
+    <slot />
+    {
+      total > 1 && (
+        <nav class="pagination" aria-label="Pagination">
+          {current > 1 && (
+            <a
+              rel="prev"
+              href={
+                current === 2 ? base : `${base}${pageSegment}${current - 1}/`
+              }
+            >
+              &lt;- Previous
+            </a>
+          )}
+          <span>
+            Page {current} of {total}
+          </span>
+          {current < total && (
+            <a rel="next" href={`${base}${pageSegment}${current + 1}/`}>
+              Next -&gt;
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .listing-summary {
+    margin-top: 12px;
+    font-size: var(--text-sm);
+    color: var(--text-subtle);
+  }
+</style>

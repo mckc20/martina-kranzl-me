@@ -1,0 +1,13 @@
+---
+import { photos } from "@/utils/content";
+import Listing from "@/layouts/Listing.astro";
+import PhotoGrid from "@/components/PhotoGrid.astro";
+const all = await photos();
+const entries = all.slice(0, 24);
+const current = 1;
+const total = Math.max(1, Math.ceil(all.length / 24));
+---
+
+<Listing title="Photos" base="/photos/" {current} {total} photo>
+  <PhotoGrid photos={entries} />
+</Listing>

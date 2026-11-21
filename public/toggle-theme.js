@@ -26,7 +26,10 @@ function setPreference() {
 function reflectPreference() {
   document.firstElementChild.setAttribute("data-theme", themeValue);
 
-  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
+  const themeButton = document.querySelector("#theme-btn");
+  const themeLabel = `Switch to ${themeValue === "light" ? "dark" : "light"} mode`;
+  themeButton?.setAttribute("aria-label", themeLabel);
+  themeButton?.setAttribute("title", themeLabel);
 
   // Read the root token even before the body exists to avoid a theme-color flash.
   const background = getComputedStyle(document.documentElement)
@@ -36,7 +39,7 @@ function reflectPreference() {
     .querySelector("meta[name='theme-color']")
     ?.setAttribute(
       "content",
-      background || (themeValue === "dark" ? "#171717" : "#f2f1ec")
+      background || (themeValue === "dark" ? "#1f1f1f" : "#f7f7f7")
     );
 }
 

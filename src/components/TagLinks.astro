@@ -1,0 +1,18 @@
+---
+import { tagSlug } from "@/utils/content/tags";
+import Tag from "./Tag.astro";
+interface Props {
+  tags: string[];
+}
+const { tags } = Astro.props;
+---
+
+{
+  tags.length > 0 && (
+    <ul class="tag-links" aria-label="Subjects">
+      {tags.map(tag => (
+        <Tag tag={tagSlug(tag)} tagName={tag} />
+      ))}
+    </ul>
+  )
+}

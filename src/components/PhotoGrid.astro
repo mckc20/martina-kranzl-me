@@ -1,0 +1,91 @@
+---
+import PhotoTile from "./PhotoTile.astro";
+import type { CollectionEntry } from "astro:content";
+interface Props {
+  photos: CollectionEntry<"photos">[];
+  compact?: boolean;
+  square?: boolean;
+}
+const { photos, compact = false, square = false } = Astro.props;
+---
+
+<photo-grid class:list={["photo-grid", { compact, square }]}>
+  {photos.map(photo => <PhotoTile {photo} {square} />)}
+</photo-grid>
+<script>
+  class PhotoGrid extends HTMLElement {
+    observer?: ResizeObserver;
+    connectedCallback() {
+      if (this.classList.contains("square")) return;
+      this.observer = new ResizeObserver(() => this.arrange());
+      this.observer.observe(this);
+      this.arrange();
+    }
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+    arrange() {
+      const columns =
+        getComputedStyle(this).gridTemplateColumns.split(" ").length;
+      const gap = 10;
+      const width = (this.clientWidth - gap * (columns - 1)) / columns;
+      if (width <= 0) return;
+      const heights = Array(columns).fill(0);
+      Array.from(this.children).forEach((tile, i) => {
+        const image = tile.querySelector("img");
+        if (
+          !(tile instanceof HTMLElement) ||
+          !image ||
+          getComputedStyle(tile).display === "none"
+        )
+          return;
+        // Sequential placement preserves the left-to-right DOM/keyboard order.
+        const column = i % columns;
+        tile.style.position = "absolute";
+        tile.style.width = `${width}px`;
+        tile.style.left = `${column * (width + gap)}px`;
+        tile.style.top = `${heights[column]}px`;
+        heights[column] +=
+          (width * Number(image.getAttribute("height"))) /
+            Number(image.getAttribute("width")) +
+          gap;
+      });
+      this.style.height = `${Math.max(0, ...heights) - (this.children.length ? gap : 0)}px`;
+    }
+  }
+  if (!customElements.get("photo-grid"))
+    customElements.define("photo-grid", PhotoGrid);
+</script>
+<style>
+  .photo-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+  .photo-grid.square {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 480px) {
+    .photo-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 768px) {
+    .photo-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .photo-grid.compact {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1200px) {
+    .photo-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .photo-grid.compact {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

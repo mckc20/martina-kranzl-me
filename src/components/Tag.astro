@@ -6,33 +6,42 @@ export interface Props {
   tagName: string;
   size?: "sm" | "lg";
   appearance?: "default" | "quiet";
+  href?: string;
+  current?: boolean;
+  showHash?: boolean;
 }
 
-const { tag, tagName, size = "sm", appearance = "default" } = Astro.props;
+const {
+  tag,
+  tagName,
+  size = "sm",
+  appearance = "default",
+  href = `/tags/${tag}/`,
+  current = false,
+  showHash = true,
+} = Astro.props;
 const quiet = appearance === "quiet";
 ---
 
 <li
   class:list={[
     "group inline-block group-hover:cursor-pointer",
-    !quiet &&
-      (size === "sm"
-        ? "my-1 underline-offset-4"
-        : "mx-1 my-3 underline-offset-8"),
+    !quiet && (size === "sm" ? "my-1" : "mx-1 my-3"),
   ]}
 >
   <a
-    href={`/tags/${tag}/`}
-    transition:name={tag}
+    href={href}
+    aria-current={current ? "page" : undefined}
     class:list={[
       quiet
         ? "inline-flex text-sm text-text-subtle hover:text-foreground"
-        : "relative inline-flex items-center gap-1 pe-2 text-xl underline decoration-dashed group-hover:-top-0.5 group-hover:text-accent focus-visible:p-1 focus-visible:no-underline",
+        : "inline-flex items-center gap-1 pe-2 text-xl decoration-dashed decoration-1 underline-offset-4 group-hover:text-accent hover:underline focus-visible:underline",
       { "text-base": !quiet && size === "sm" },
+      { "font-medium text-accent": current },
     ]}
   >
     {
-      !quiet && (
+      !quiet && showHash && (
         <IconHash
           class:list={[
             "inline-block shrink-0 opacity-80",

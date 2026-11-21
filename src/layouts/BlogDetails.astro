@@ -1,0 +1,260 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Layout from "./Layout.astro";
+import PhotoPreview from "@/components/PhotoPreview.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import TagLinks from "@/components/TagLinks.astro";
+import { formatGermanDate as formatDate } from "@/utils/formatDate";
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const {
+  title,
+  description,
+  pubDatetime,
+  modDatetime,
+  heroImage,
+  heroImageAlt,
+  heroImagePosition,
+  heroBackLinkColor,
+  introduction,
+  ogImage,
+  tags,
+  lang,
+  author,
+  canonicalURL,
+} = post.data;
+---
+
+<Layout
+  title={`${title} | Martina Kranzl`}
+  {description}
+  {pubDatetime}
+  {modDatetime}
+  {author}
+  {canonicalURL}
+  ogImage={ogImage?.src ?? heroImage?.src}
+  schemaType="BlogPosting"
+  fullBleed={!!heroImage}
+>
+  <PhotoPreview />
+  <Header flushBottom={!!heroImage} />
+  <main id="main-content" class="shell">
+    <article
+      class="reading written-post"
+      data-pagefind-body
+      data-post-preview
+      lang={lang}
+    >
+      {
+        heroImage && (
+          <div class="post-hero-frame">
+            <Image
+              class="post-hero"
+              data-preview-src={heroImage.src}
+              src={heroImage}
+              alt={heroImageAlt ?? ""}
+              widths={[480, 720, 1080, 1440, 1920, 2560]}
+              sizes="100vw"
+              loading="eager"
+              fetchpriority="high"
+              style={{ objectPosition: heroImagePosition ?? "center" }}
+            />
+            <div class="hero-back-container">
+              <a
+                class="back-link hero-back"
+                href="/blog/"
+                data-color={heroBackLinkColor}
+                style={
+                  heroBackLinkColor ? { color: heroBackLinkColor } : undefined
+                }
+              >
+                &lt;- Back to Blog
+              </a>
+            </div>
+          </div>
+        )
+      }
+      <header class="post-heading">
+        {
+          !heroImage && (
+            <a class="back-link" href="/blog/">
+              &lt;- Back to Blog
+            </a>
+          )
+        }
+        <time datetime={pubDatetime.toISOString()} class="article-date">
+          {formatDate(pubDatetime)}
+        </time>
+        <h1 class="article-title" data-pagefind-meta="title">{title}</h1>
+        {introduction && <p class="post-introduction">{introduction}</p>}
+      </header>
+      <div class="app-prose" id="article"><Content /></div>
+      <TagLinks {tags} />
+    </article>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  function updateHeroLinkColors() {
+    document
+      .querySelectorAll<HTMLElement>(".post-hero-frame")
+      .forEach(frame => {
+        const image = frame.querySelector<HTMLImageElement>(".post-hero");
+        const link = frame.querySelector<HTMLElement>(".hero-back");
+        if (!image || !link || link.dataset.color) return;
+
+        const updateColor = () => {
+          if (!image.naturalWidth || !image.naturalHeight) return;
+          const canvas = document.createElement("canvas");
+          canvas.width = canvas.height = 32;
+          const context = canvas.getContext("2d", { willReadFrequently: true });
+          if (!context) return;
+          const imageRect = image.getBoundingClientRect();
+          const linkRect = link.getBoundingClientRect();
+          if (!imageRect.width || !imageRect.height || !image.naturalWidth)
+            return;
+
+          // Match object-fit: cover and object-position before sampling the area
+          // behind the link, rather than averaging unrelated parts of the hero.
+          const scale = Math.max(
+            imageRect.width / image.naturalWidth,
+            imageRect.height / image.naturalHeight
+          );
+          const [positionX, positionY] =
+            getComputedStyle(image).objectPosition.split(" ");
+          const offset = (position: string, remaining: number) =>
+            position.endsWith("%")
+              ? (parseFloat(position) / 100) * remaining
+              : parseFloat(position);
+          const offsetX = offset(
+            positionX,
+            imageRect.width - image.naturalWidth * scale
+          );
+          const offsetY = offset(
+            positionY,
+            imageRect.height - image.naturalHeight * scale
+          );
+          context.drawImage(
+            image,
+            (linkRect.left - imageRect.left - offsetX) / scale,
+            (linkRect.top - imageRect.top - offsetY) / scale,
+            linkRect.width / scale,
+            linkRect.height / scale,
+            0,
+            0,
+            32,
+            32
+          );
+          const { data } = context.getImageData(0, 0, 32, 32);
+          let luminance = 0;
+          for (let i = 0; i < data.length; i += 4) {
+            const linear = [data[i], data[i + 1], data[i + 2]].map(value => {
+              const channel = value / 255;
+              return channel <= 0.04045
+                ? channel / 12.92
+                : ((channel + 0.055) / 1.055) ** 2.4;
+            });
+            luminance +=
+              0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+          }
+          // Favor black on medium-light areas; reserve white for dark backgrounds.
+          link.style.color =
+            luminance / (data.length / 4) < 0.12 ? "#fff" : "#000";
+        };
+
+        if (image.complete && image.naturalWidth) updateColor();
+        else image.addEventListener("load", updateColor, { once: true });
+        const observer = new ResizeObserver(updateColor);
+        observer.observe(image);
+        observer.observe(link);
+        document.addEventListener(
+          "astro:before-swap",
+          () => observer.disconnect(),
+          { once: true }
+        );
+      });
+  }
+
+  updateHeroLinkColors();
+  document.addEventListener("astro:page-load", updateHeroLinkColors);
+</script>
+
+<style>
+  .back-link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #000;
+  }
+  .post-hero-frame {
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    max-width: none;
+    transform: translateX(-50%);
+    margin-bottom: 32px;
+  }
+  .post-hero {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: clamp(240px, 40vw, 500px);
+    object-fit: cover;
+  }
+  .hero-back-container {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    width: calc(100% - 2 * var(--page-gutter));
+    max-width: 800px;
+    margin-inline: auto;
+  }
+  .hero-back {
+    margin: 0;
+  }
+  .post-heading {
+    margin-bottom: 40px;
+  }
+  .post-heading .back-link {
+    margin-bottom: 16px;
+  }
+  .post-heading .article-date {
+    margin-bottom: 12px;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .post-introduction {
+    margin-top: 20px;
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.65;
+  }
+  .written-post .app-prose {
+    display: flow-root;
+  }
+  .written-post :global(.app-prose :is(h2, h3, h4, h5, h6, .gallery-wrapper)) {
+    clear: both;
+  }
+  .written-post
+    :global(
+      .app-prose
+        .post-image[data-wrap-heading="true"]:is(
+          [data-align="left"],
+          [data-align="right"]
+        )
+        + :is(h2, h3, h4, h5, h6)
+    ) {
+    clear: none;
+    @media (min-width: 640px) {
+      margin-top: 0;
+    }
+  }
+</style>

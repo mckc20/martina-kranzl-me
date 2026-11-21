@@ -1,0 +1,115 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Layout from "./Layout.astro";
+import PhotoPreview from "@/components/PhotoPreview.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import PhotoNavigation from "@/components/PhotoNavigation.astro";
+import PhotoMetadata from "@/components/PhotoMetadata.astro";
+import { captureMetadata } from "@/utils/content/exif";
+import { entryTitle } from "@/utils/content";
+import TagLinks from "@/components/TagLinks.astro";
+interface Props {
+  photo: CollectionEntry<"photos">;
+  previous?: CollectionEntry<"photos">;
+  next?: CollectionEntry<"photos">;
+}
+const { photo, previous, next } = Astro.props;
+const { Content } = await render(photo);
+const metadata = await captureMetadata(photo);
+const captureDate =
+  metadata.dateTaken &&
+  new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${metadata.dateTaken}T12:00:00Z`));
+const {
+  image,
+  title,
+  caption,
+  alt,
+  tags,
+  lang,
+  pubDatetime,
+  modDatetime,
+  location,
+} = photo.data;
+---
+
+<Layout
+  title={`${entryTitle(photo)} | Martina Kranzl`}
+  description={caption ?? alt ?? title}
+  ogImage={image.src}
+  pubDatetime={pubDatetime}
+  modDatetime={modDatetime}
+  schemaType="ImageObject"
+>
+  <PhotoPreview />
+  <Header />
+  <main id="main-content" class="shell">
+    <PhotoNavigation {previous} {next} />
+    <article data-pagefind-body data-post-preview lang={lang}>
+      <Image
+        class="primary-photo"
+        data-preview-src={image.src}
+        data-preview-caption={caption}
+        src={image}
+        alt={alt ?? caption ?? title ?? ""}
+        widths={[480, 720, 1080, 1440, 1920]}
+        sizes="(max-width:767px) calc(100vw - 48px), (max-width:1184px) calc(100vw - 64px), 1088px"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="photo-copy reading">
+        {
+          captureDate && (
+            <p class="eyebrow capture-date">
+              <time datetime={metadata.dateTaken}>{captureDate}</time>
+            </p>
+          )
+        }
+        <h1 class:list={{ "sr-only": !title }} data-pagefind-meta="title">
+          {title ?? entryTitle(photo)}
+        </h1>
+        {caption && <p class="photo-caption">{caption}</p>}
+        <div class="app-prose" id="article"><Content /></div>
+        <TagLinks {tags} />
+        <PhotoMetadata camera={metadata.camera} {location} />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>
+<style>
+  .primary-photo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 85svh;
+    margin-inline: auto;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+  #article :global(img) {
+    border-radius: 6px;
+  }
+  .photo-copy {
+    margin-top: 32px;
+  }
+  .photo-copy h1 {
+    font-size: var(--text-4xl);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .capture-date {
+    margin-bottom: 12px;
+  }
+  .photo-caption {
+    color: var(--text-subtle);
+    margin-bottom: 24px;
+  }
+</style>

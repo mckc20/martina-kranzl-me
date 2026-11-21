@@ -1,0 +1,13 @@
+---
+import { blog } from "@/utils/content";
+import Listing from "@/layouts/Listing.astro";
+import BlogList from "@/components/BlogList.astro";
+const all = await blog();
+const entries = all.slice(0, 10);
+const current = 1;
+const total = Math.max(1, Math.ceil(all.length / 10));
+---
+
+<Listing title="Blog" base="/blog/" {current} {total}>
+  <BlogList posts={entries} />
+</Listing>

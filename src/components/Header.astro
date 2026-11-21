@@ -1,291 +1,193 @@
 ---
-import { SITE } from "@/config";
 import IconSearch from "@/assets/icons/IconSearch.svg";
-
-const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+interface Props {
+  flushBottom?: boolean;
+}
+const { flushBottom = false } = Astro.props;
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/posts", label: "Posts" },
-  { href: "/photos", label: "Photos" },
-  { href: "/tags", label: "Tags" },
+  ["/", "Home"],
+  ["/photos/", "Photos"],
+  ["/blog/", "Blog"],
 ];
-const isActive = (href: string) =>
+const active = (href: string) =>
   href === "/"
-    ? pathname === "/"
-    : pathname === href || pathname.startsWith(`${href}/`);
+    ? Astro.url.pathname === "/"
+    : Astro.url.pathname.startsWith(href.replace(/\/$/, ""));
 ---
 
-<header class="site-header">
-  <a
-    id="skip-to-content"
-    href="#main-content"
-    class="absolute start-4 -top-full z-50 bg-background px-3 py-2 focus:top-4"
-    >Skip to content</a
-  >
-  <nav class="site-nav" aria-label="Primary navigation">
-    <div class="nav-content">
-      <a href="/" class="site-name" aria-label={`${SITE.title} home`}>
-        <img
-          src="/favicon-96x96.png"
-          width="96"
-          height="96"
-          alt=""
-          class="site-portrait"
-        />
-      </a>
-      <div class="menu-content">
-        <button
-          id="menu-btn"
-          class="menu-toggle"
-          aria-label="Open Menu"
-          aria-expanded="false"
-          aria-controls="menu-items"
-        >
-          <span class="menu-toggle-icon" aria-hidden="true"></span>
-        </button>
-        <ul id="menu-items" class="menu-list">
-          {
-            links.map(({ href, label }) => (
-              <li>
-                <a
-                  href={href}
-                  class:list={{ "active-nav": isActive(href) }}
-                  aria-current={isActive(href) ? "page" : undefined}
-                >
-                  {label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="nav-tools">
-        <a
-          href="/search"
-          class="search-link"
-          aria-label="Search"
-          title="Search"
-          aria-current={isActive("/search") ? "page" : undefined}
-        >
-          <IconSearch class="size-6" aria-hidden="true" />
-        </a>
-        {
-          SITE.lightAndDarkMode && (
-            <button
-              id="theme-btn"
-              class="theme-toggle"
-              title="Toggles light & dark"
-              aria-label="auto"
-              aria-live="polite"
-            >
-              <span
-                class="size-4 rounded-full bg-foreground"
-                aria-hidden="true"
-              />
-            </button>
-          )
-        }
-      </div>
+<header
+  class:list={["site-header", { "flush-bottom": flushBottom }]}
+  data-pagefind-ignore
+>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <nav class="site-nav shell" aria-label="Primary navigation">
+    <a href="/" class="wordmark" aria-label="martina kranzl home">
+      <img
+        src="/favicon-96x96.png"
+        width="96"
+        height="96"
+        alt=""
+        class="site-portrait"
+      />
+      <span class="wordmark-text">martina kranzl</span>
+    </a>
+    <ul class="primary-links">
+      {
+        links.map(([href, label]) => (
+          <li>
+            <a href={href} aria-current={active(href) ? "page" : undefined}>
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="nav-tools">
+      <a href="/search/" aria-label="Search"
+        ><IconSearch width="20" height="20" /></a
+      >
+      <button
+        id="theme-btn"
+        aria-label="Switch to dark mode"
+        title="Change colour theme"
+      >
+        <IconSunHigh class="theme-sun" aria-hidden="true" />
+        <IconMoon class="theme-moon" aria-hidden="true" />
+      </button>
     </div>
   </nav>
 </header>
-
-<script>
-  let menuController: AbortController;
-  function initMenu() {
-    menuController?.abort();
-    menuController = new AbortController();
-    const { signal } = menuController;
-    const nav = document.querySelector<HTMLElement>(".site-nav");
-    const button = document.querySelector<HTMLButtonElement>("#menu-btn");
-    if (!nav || !button) return;
-    function setOpen(open: boolean) {
-      nav?.classList.toggle("menu-open", open);
-      button?.setAttribute("aria-expanded", String(open));
-      button?.setAttribute("aria-label", open ? "Close Menu" : "Open Menu");
-    }
-    button.addEventListener(
-      "click",
-      () => setOpen(button.getAttribute("aria-expanded") !== "true"),
-      { signal }
-    );
-    document.addEventListener(
-      "keydown",
-      event => {
-        if (
-          event.key === "Escape" &&
-          button.getAttribute("aria-expanded") === "true"
-        ) {
-          setOpen(false);
-          button.focus();
-        }
-      },
-      { signal }
-    );
-    document.addEventListener(
-      "pointerdown",
-      event => {
-        if (!nav.contains(event.target as Node)) setOpen(false);
-      },
-      { signal }
-    );
-    window
-      .matchMedia("(min-width: 768px)")
-      .addEventListener("change", () => setOpen(false), { signal });
-  }
-  initMenu();
-  document.addEventListener("astro:page-load", initMenu);
-</script>
-
 <style>
+  .site-header {
+    margin-bottom: 48px;
+  }
+  .site-header.flush-bottom {
+    margin-bottom: 0;
+  }
   .site-nav {
-    position: relative;
-    width: 100%;
-    padding: 1rem 1rem 3rem;
-  }
-  .nav-content {
-    max-width: 48rem;
-    margin-inline: auto;
-    padding-right: 6rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .site-name {
     display: flex;
     align-items: center;
+    gap: 32px;
+    min-height: 104px;
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
     flex-shrink: 0;
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    line-height: 24px;
+    white-space: nowrap;
   }
   .site-portrait {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     object-fit: cover;
     flex-shrink: 0;
   }
-  .menu-content {
-    position: relative;
-    margin-left: 0;
+  .primary-links {
+    display: flex;
+    gap: 24px;
+    margin-left: auto;
+  }
+  .primary-links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .primary-links a[aria-current] {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 8px;
   }
   .nav-tools {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-shrink: 0;
+    gap: 8px;
   }
-  .menu-toggle,
-  .theme-toggle,
-  .search-link {
+  .nav-tools a,
+  .nav-tools button {
     display: flex;
-    width: 2rem;
-    height: 2rem;
     align-items: center;
     justify-content: center;
+    width: 44px;
+    height: 44px;
   }
-  .menu-toggle {
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+    background: var(--background);
+    padding: 12px;
+    z-index: 100;
+  }
+  #theme-btn {
     position: relative;
   }
-  .menu-toggle-icon,
-  .menu-toggle-icon::before,
-  .menu-toggle-icon::after {
+  #theme-btn svg {
     position: absolute;
-    width: 1.5rem;
-    height: 1px;
-    background: currentColor;
-    content: "";
+    transition: transform 200ms ease;
   }
-  .menu-toggle-icon::before {
-    left: 0;
-    top: -5px;
+  .theme-sun {
+    transform: scale(1) rotate(0);
   }
-  .menu-toggle-icon::after {
-    left: 0;
-    top: 5px;
+  .theme-moon {
+    transform: scale(0) rotate(-90deg);
   }
-  .menu-open .menu-toggle-icon {
-    background: transparent;
+  :global([data-theme="dark"]) .theme-sun {
+    transform: scale(0) rotate(90deg);
   }
-  .menu-open .menu-toggle-icon::before {
-    top: 0;
-    transform: rotate(45deg);
+  :global([data-theme="dark"]) .theme-moon {
+    transform: scale(1) rotate(0);
   }
-  .menu-open .menu-toggle-icon::after {
-    top: 0;
-    transform: rotate(-45deg);
-  }
-  .menu-list {
-    display: none;
-    position: absolute;
-    top: calc(100% + 0.75rem);
-    left: 0;
-    z-index: 20;
-    width: 12rem;
-    flex-direction: column;
-    gap: 0.25rem;
-    border: 1px dashed var(--foreground);
-    background: var(--background);
-    padding: 1rem;
-  }
-  .menu-open .menu-list {
-    display: flex;
-  }
-  .menu-list a {
-    display: inline-flex;
-    align-items: center;
-    padding-block: 0.25rem;
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 1.25rem;
-    line-height: 1.5;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 2px;
-  }
-  .menu-list a:hover {
-    text-decoration-line: underline;
-  }
-  @media (max-width: 359px) {
-    .site-portrait {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-    .nav-content {
-      gap: 0.25rem;
+  @media (prefers-reduced-motion: reduce) {
+    #theme-btn svg {
+      transition: none;
     }
   }
-  @media (min-width: 640px) {
-    .site-portrait {
-      width: 2rem;
-      height: 2rem;
-    }
+  .skip-link:focus {
+    top: 8px;
+  }
+  @media (max-width: 767px) {
     .site-nav {
-      padding: 2rem 2rem 6rem;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 16px;
+      padding-bottom: 12px;
     }
-    .nav-content {
-      gap: 1rem;
+    .wordmark {
+      min-width: 44px;
+      justify-content: center;
     }
-    .nav-tools {
-      top: 2rem;
-      right: 1.5rem;
-      gap: 2rem;
-    }
-  }
-  @media (min-width: 768px) {
-    .menu-toggle {
+    .wordmark-text {
       display: none;
     }
-    .menu-list {
-      display: flex;
-      position: static;
-      width: auto;
-      flex-direction: row;
-      gap: 1.5rem;
-      border: 0;
-      background: transparent;
-      padding: 0;
+    .nav-tools {
+      margin-left: auto;
+    }
+    .primary-links {
+      order: 3;
+      width: 100%;
+      margin: 0;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .site-header {
+      margin-bottom: 32px;
+    }
+  }
+  @media (max-width: 359px) {
+    .nav-tools {
+      gap: 4px;
+    }
+    .primary-links {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 4px 16px;
     }
   }
 </style>

@@ -1,21 +1,30 @@
 ---
 import "@pagefind/default-ui/css/ui.css";
-import Main from "@/layouts/Main.astro";
-import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
+import Listing from "@/layouts/Listing.astro";
 import { SITE } from "@/config";
 
 const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 ---
 
-<Layout title={`Search | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="Search" pageDesc="Search any article ...">
-    <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>
-  </Main>
-  <Footer />
-</Layout>
+<Listing title="Search" base="/search/" current={1} total={1}>
+  <div slot="heading" class="listing-heading search-heading">
+    <h1>Search</h1>
+  </div>
+  <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>
+</Listing>
+
+<style>
+  .search-heading h1 {
+    margin-top: 0;
+    font-size: 1.875rem;
+  }
+
+  @media (max-width: 767px) {
+    .search-heading h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
 
 <script>
   function initSearch() {
@@ -97,7 +106,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
     --pagefind-ui-border: var(--border);
     --pagefind-ui-primary: var(--accent);
     --pagefind-ui-tag: var(--background);
-    --pagefind-ui-border-radius: 0.375rem;
+    --pagefind-ui-border-radius: 0.75rem;
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-image-border-radius: 8px;
     --pagefind-ui-image-box-ratio: 3 / 2;
@@ -106,9 +115,15 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       background-color: var(--foreground);
     }
 
-    input {
+    .pagefind-ui__search-input {
+      font-size: var(--text-base);
       font-weight: 400;
       border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .pagefind-ui__search-clear {
+      border-radius: 999px;
     }
 
     input:focus-visible {

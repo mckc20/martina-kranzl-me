@@ -2,9 +2,9 @@ export const SITE = {
   website: "https://martina-kranzl.me/",
   author: "Martina Kranzl",
   profile: "https://martina-kranzl.me/about/",
-  desc: "Fotografie und Zeichnungen aus Wien.",
-  title: "martina kranzl",
-  ogImage: "astropaper-og.jpg",
+  desc: "Photography, writing and everyday observations from Vienna.",
+  title: "Martina Kranzl",
+  ogImage: "",
   lightAndDarkMode: true,
   postPerIndex: 5,
   photoblogPostsPerIndex: 12,
@@ -20,6 +20,6 @@ export const SITE = {
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"
-  lang: "de", // html lang code. Set this empty and default will be "en"
+  lang: "en", // html lang code. Set this empty and default will be "en"
   timezone: "Europe/Vienna", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 } as const;

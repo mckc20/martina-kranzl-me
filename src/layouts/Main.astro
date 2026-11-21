@@ -27,11 +27,7 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
 ---
 
 {props.showBreadcrumb && <Breadcrumb />}
-<main
-  data-backUrl={backUrl}
-  id="main-content"
-  class="mx-auto w-full max-w-app flex-1 px-4"
->
+<main data-backUrl={backUrl} id="main-content" class="shell flex-1">
   {
     "titleTransition" in props ? (
       <h1 class={titleClass}>

@@ -1,6 +1,6 @@
 import { SITE } from "@/config";
 
-const DATE_LOCALE = "de-AT";
+const DATE_LOCALE = "en-GB";
 
 export function formatGermanDate(
   date: string | Date,

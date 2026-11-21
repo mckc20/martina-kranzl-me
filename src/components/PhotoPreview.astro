@@ -1,0 +1,106 @@
+---
+import "photoswipe/style.css";
+---
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import PhotoSwipe from "photoswipe";
+
+  const lightboxes = new Map<HTMLElement, PhotoSwipeLightbox>();
+
+  function initPreviews() {
+    // Enhance ordinary post images, including Markdown images, without changing
+    // links authored for navigation or images already managed by a Gallery.
+    document
+      .querySelectorAll<HTMLElement>("[data-post-preview]")
+      .forEach(post => {
+        post.querySelectorAll<HTMLImageElement>("img").forEach(image => {
+          if (image.closest("a, [data-gallery]")) return;
+          const width = image.getAttribute("width");
+          const height = image.getAttribute("height");
+          if (!width || !height) return;
+
+          const link = document.createElement("a");
+          link.href = image.dataset.previewSrc || image.src;
+          link.dataset.pswpWidth = width;
+          link.dataset.pswpHeight = height;
+          link.dataset.postPhoto = "";
+          link.className = "photo-preview-link";
+          const caption =
+            image.dataset.previewCaption ??
+            image.closest("figure")?.querySelector("figcaption")?.textContent ??
+            "";
+          if (caption) link.dataset.caption = caption;
+          if (image.classList.contains("post-hero"))
+            link.dataset.cropped = "true";
+          image.before(link);
+          link.append(image);
+        });
+      });
+    document
+      .querySelectorAll<HTMLElement>("[data-gallery], [data-post-preview]")
+      .forEach(gallery => {
+        if (lightboxes.has(gallery)) return;
+        gallery.dataset.pswpInit = "true";
+
+        const lightbox = new PhotoSwipeLightbox({
+          gallery,
+          children: gallery.hasAttribute("data-gallery")
+            ? "a[data-pswp-width]"
+            : "a[data-post-photo]",
+          // Load the viewer with the page so the first click opens immediately.
+          pswpModule: PhotoSwipe,
+        });
+
+        lightbox.on("uiRegister", () => {
+          lightbox.pswp?.ui?.registerElement({
+            name: "caption",
+            order: 9,
+            isButton: false,
+            appendTo: "root",
+            html: "",
+            onInit: el => {
+              el.style.cssText =
+                "position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,.5));color:#fff;font-size:var(--text-sm);text-align:center;pointer-events:none;";
+
+              lightbox.pswp?.on("change", () => {
+                const caption =
+                  lightbox.pswp?.currSlide?.data.element?.getAttribute(
+                    "data-caption"
+                  ) ?? "";
+                el.textContent = caption;
+                el.style.display = caption ? "block" : "none";
+              });
+            },
+          });
+        });
+
+        lightbox.init();
+        lightboxes.set(gallery, lightbox);
+      });
+  }
+
+  document.addEventListener("astro:before-swap", () => {
+    lightboxes.forEach((lightbox, gallery) => {
+      lightbox.destroy();
+      delete gallery.dataset.pswpInit;
+    });
+    lightboxes.clear();
+  });
+
+  // Init on first load
+  initPreviews();
+
+  // Re-init after view transitions
+  document.addEventListener("astro:after-swap", initPreviews);
+  document.addEventListener("astro:page-load", initPreviews);
+</script>
+
+<style is:global>
+  .photo-preview-link {
+    display: block;
+    cursor: zoom-in;
+    border: 0;
+    text-decoration: none;
+  }
+</style>

@@ -1,0 +1,24 @@
+---
+import { blog } from "@/utils/content";
+import Listing from "@/layouts/Listing.astro";
+import BlogList from "@/components/BlogList.astro";
+export async function getStaticPaths() {
+  const entries = await blog();
+  return Array.from(
+    { length: Math.max(0, Math.ceil(entries.length / 10) - 1) },
+    (_, index) => ({
+      params: { page: String(index + 2) },
+      props: {
+        entries: entries.slice((index + 1) * 10, (index + 2) * 10),
+        current: index + 2,
+        total: Math.ceil(entries.length / 10),
+      },
+    })
+  );
+}
+const { entries, current, total } = Astro.props;
+---
+
+<Listing title="Blog" base="/blog/" {current} {total}>
+  <BlogList posts={entries} />
+</Listing>

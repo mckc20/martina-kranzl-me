@@ -1,0 +1,79 @@
+---
+interface Props {
+  location?: string;
+  camera?: Record<string, string | number>;
+}
+const { location, camera = {} } = Astro.props;
+const format = (key: string, value: string | number) =>
+  key === "focalLengthMm"
+    ? `${value} mm`
+    : key === "aperture"
+      ? `ƒ/${value}`
+      : key === "exposureSeconds"
+        ? Number(value) < 1
+          ? `1/${Math.round(1 / Number(value))} s`
+          : `${value} s`
+        : key === "iso"
+          ? `ISO ${value}`
+          : value;
+const compactLine = (keys: string[]) =>
+  keys
+    .filter(key => camera[key] !== undefined && camera[key] !== "")
+    .map(key => format(key, camera[key]))
+    .join(" · ");
+const settings = compactLine([
+  "focalLengthMm",
+  "aperture",
+  "exposureSeconds",
+  "iso",
+]);
+const equipment = compactLine(["make", "model", "lens"]);
+---
+
+{
+  location && (
+    <dl class="capture-info">
+      <div>
+        <dt>Location</dt>
+        <dd>{location}</dd>
+      </div>
+    </dl>
+  )
+}
+{
+  (settings || equipment) && (
+    <div class="camera-details">
+      {settings && <p>{settings}</p>}
+      {equipment && <p>{equipment}</p>}
+    </div>
+  )
+}
+<style>
+  dl {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+  }
+  dt {
+    color: var(--text-subtle);
+  }
+  .capture-info,
+  .camera-details {
+    font-size: var(--text-sm);
+    margin-top: 32px;
+  }
+  .camera-details {
+    margin-top: 16px;
+    color: var(--text-subtle);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+  .camera-details p {
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+import { photos, entryTitle } from "@/utils/content";
+interface Props {
+  id: string;
+  caption?: string;
+}
+const { id, caption } = Astro.props;
+const photo = (await photos()).find(photo => photo.id === id);
+if (!photo) throw new Error(`PhotoFigure: no published photo with ID "${id}"`);
+---
+
+<figure>
+  <a
+    href={photo.data.image.src}
+    data-pswp-width={photo.data.image.width}
+    data-pswp-height={photo.data.image.height}
+    data-post-photo
+    data-caption={caption}
+    class="photo-preview-link"
+    aria-label={entryTitle(photo)}
+    ><Image
+      src={photo.data.image}
+      alt={photo.data.alt ?? photo.data.title ?? ""}
+      widths={[480, 720, 1080]}
+      sizes="(max-width:767px) 90vw, 720px"
+    /></a
+  >{caption && <figcaption>{caption}</figcaption>}
+</figure>
