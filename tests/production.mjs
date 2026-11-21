@@ -13,6 +13,29 @@ const publicItems = migration.filter(
 const html = route =>
   fs.readFile(path.join("dist", route, "index.html"), "utf8");
 
+test("Vercel deploys the complete search index from the current build", async () => {
+  const source = "dist/pagefind";
+  const destination = ".vercel/output/static/pagefind";
+  const files = (await fs.readdir(source, { recursive: true })).sort();
+  assert.ok(files.includes("pagefind.js"));
+  assert.ok(files.includes("pagefind-entry.json"));
+  assert.ok(files.some(file => file.endsWith(".pf_meta")));
+  assert.ok(files.some(file => file.endsWith(".pf_index")));
+  assert.ok(files.some(file => file.endsWith(".pf_fragment")));
+  assert.deepEqual(
+    (await fs.readdir(destination, { recursive: true })).sort(),
+    files
+  );
+  for (const file of files) {
+    if (!(await fs.stat(path.join(source, file))).isFile()) continue;
+    assert.deepEqual(
+      await fs.readFile(path.join(destination, file)),
+      await fs.readFile(path.join(source, file)),
+      `Deployed search asset differs: ${file}`
+    );
+  }
+});
+
 test("canonical detail pages, sitemap, language and structured data match public inventory", async () => {
   const sitemap = await fs.readFile("dist/sitemap-0.xml", "utf8");
   assert.ok(!sitemap.includes("/posts/"));
