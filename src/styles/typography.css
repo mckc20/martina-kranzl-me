@@ -3,7 +3,8 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose prose-lg;
+    @apply prose;
+    font-size: var(--text-base);
 
     h1,
     h2,
@@ -98,26 +99,55 @@
     }
 
     blockquote {
-      @apply border-s-accent/80 break-words opacity-80;
-    }
-
-    &#article blockquote {
-      @apply relative my-8 border-0 bg-transparent py-1 ps-8 pe-0 font-normal text-foreground not-italic opacity-100 shadow-none;
+      @apply border-0 font-serif font-normal break-words text-foreground italic opacity-100;
+      position: relative;
+      margin: 2rem 0;
+      padding: 0.25rem 0 0.25rem 1.25rem;
+      font-size: var(--text-xl);
+      line-height: 1.75;
       quotes: none;
     }
 
-    &#article blockquote::before {
+    &#article blockquote {
+      @apply bg-transparent shadow-none;
+    }
+
+    blockquote::before {
       content: "\201c";
-      @apply absolute start-0 top-0 font-serif text-4xl leading-none font-bold text-accent-highlight not-italic;
+      position: absolute;
+      inset-inline-start: 0;
+      top: 0;
+      color: var(--accent-highlight);
+      font-size: var(--text-4xl);
+      font-style: normal;
+      line-height: 1;
     }
 
-    &#article blockquote::after {
+    blockquote::after {
       content: "";
-      @apply absolute start-2 top-10 bottom-1 w-px bg-accent-highlight;
+      position: absolute;
+      inset-inline-start: 0.25rem;
+      top: 1.25rem;
+      bottom: 0.25rem;
+      width: 1px;
+      background: var(--accent-highlight);
     }
 
-    &#article blockquote p {
-      @apply my-0 font-normal text-foreground not-italic before:content-none after:content-none;
+    blockquote p {
+      @apply my-0 font-normal text-foreground italic before:content-none after:content-none;
+    }
+
+    blockquote > p + p {
+      margin-top: 1em;
+    }
+
+    blockquote > p:last-child::after {
+      content: "\201d";
+      margin-inline-start: 0.15em;
+      color: var(--accent-highlight);
+      font-size: var(--text-4xl);
+      font-style: normal;
+      line-height: 1;
     }
 
     details {

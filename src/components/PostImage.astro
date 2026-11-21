@@ -1,0 +1,103 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  align?: "left" | "right" | "center";
+  width?: number | `${number}%`;
+  wrapHeading?: boolean;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  align = "center",
+  width,
+  wrapHeading = false,
+} = Astro.props;
+if (!["left", "right", "center"].includes(align)) {
+  throw new Error("PostImage: align must be left, right or center.");
+}
+const displayWidth = width ?? (align === "center" ? "100%" : "42%");
+const percentage = typeof displayWidth === "string";
+const amount = percentage ? Number.parseFloat(displayWidth) : displayWidth;
+if (
+  !Number.isFinite(amount) ||
+  amount <= 0 ||
+  (percentage && (!/^\d+(\.\d+)?%$/.test(displayWidth) || amount > 100))
+) {
+  throw new Error(
+    "PostImage: width must be a positive pixel number or a percentage up to 100%."
+  );
+}
+const cssWidth = percentage ? displayWidth : String(displayWidth) + "px";
+const desktopWidth = Math.min(800, percentage ? amount * 8 : amount);
+---
+
+<figure
+  class="post-image not-prose"
+  data-align={align}
+  data-wrap-heading={wrapHeading ? "true" : undefined}
+  style={"--post-image-width: " + cssWidth}
+>
+  <Image
+    src={src}
+    data-preview-src={src.src}
+    alt={alt}
+    widths={[320, 480, 720, 960, 1280, 1600]}
+    sizes={"(max-width: 639px) 100vw, " + desktopWidth + "px"}
+    loading="lazy"
+  />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .post-image {
+    width: var(--post-image-width);
+    max-width: 100%;
+  }
+  .post-image[data-align="left"] {
+    float: left;
+    margin: 0.35rem 24px 16px 0;
+  }
+  .post-image[data-align="right"] {
+    float: right;
+    margin: 0.35rem 0 16px 24px;
+  }
+  .post-image[data-align="center"] {
+    float: none;
+    clear: both;
+    margin: 32px auto;
+  }
+  .post-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 6px;
+  }
+  figcaption {
+    margin-top: 8px;
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--text-subtle);
+  }
+  @media (min-width: 640px) {
+    .post-image[data-wrap-heading="true"]:is(
+        [data-align="left"],
+        [data-align="right"]
+      ) {
+      margin-top: 0;
+    }
+  }
+  @media (max-width: 639px) {
+    .post-image[data-align] {
+      float: none;
+      width: 100%;
+      margin: 24px 0;
+    }
+  }
+</style>

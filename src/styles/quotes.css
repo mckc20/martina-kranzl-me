@@ -1,0 +1,112 @@
+.styled-quote {
+  margin: 2rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  overflow-wrap: anywhere;
+}
+
+.styled-quote blockquote {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--text-xl);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.75;
+  opacity: 1;
+  quotes: none;
+}
+
+.styled-quote blockquote::before,
+.styled-quote blockquote::after,
+.styled-quote blockquote p::before,
+.styled-quote blockquote p::after {
+  content: none;
+}
+
+.styled-quote blockquote p {
+  display: inline;
+  margin: 0;
+  font-style: inherit;
+}
+
+.styled-quote blockquote p + p::before {
+  content: "\A\A";
+  white-space: pre;
+}
+
+.quote-marker {
+  color: var(--accent-highlight);
+  font-style: normal;
+  font-size: calc(var(--text-base) * 1.25);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.opening-marker {
+  position: absolute;
+  inset-inline-start: -1.25rem;
+  top: 0.2em;
+}
+
+.closing-marker {
+  margin-inline-start: 0.35em;
+}
+
+.quote {
+  position: relative;
+}
+
+.quote blockquote {
+  border: 0;
+}
+
+.quote::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0.25rem;
+  top: 1.5rem;
+  bottom: 0.25rem;
+  width: 1px;
+  background: var(--accent-highlight);
+}
+
+.quote .quote-marker {
+  font-size: var(--text-4xl);
+}
+
+.quote .opening-marker {
+  top: 0;
+}
+
+.quote .closing-marker {
+  margin-inline-start: 0;
+}
+
+.styled-quote figcaption {
+  margin-top: 0.5rem;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.75;
+  opacity: 1;
+}
+
+.styled-quote figcaption a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.styled-quote figcaption p {
+  display: inline;
+  margin: 0;
+}
+
+.styled-quote figcaption a:hover,
+.styled-quote figcaption a:focus-visible {
+  color: var(--accent);
+}

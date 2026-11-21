@@ -1,0 +1,27 @@
+---
+import "@/styles/quotes.css";
+
+interface Props {
+  attribution?: string;
+}
+
+const { attribution } = Astro.props;
+const hasAttribution = Astro.slots.has("attribution") || attribution;
+---
+
+<figure class="song-quote styled-quote not-prose">
+  <blockquote>
+    <span class="quote-marker opening-marker" aria-hidden="true">♪</span>
+    <slot />{" "}<span class="quote-marker closing-marker" aria-hidden="true"
+      >♫</span
+    >
+  </blockquote>
+  {
+    hasAttribution && (
+      <figcaption>
+        {"— "}
+        <slot name="attribution">{attribution}</slot>
+      </figcaption>
+    )
+  }
+</figure>
