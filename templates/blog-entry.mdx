@@ -1,0 +1,63 @@
+---
+title: A note from Vienna
+pubDatetime: 2026-11-15T16:30:00+01:00
+draft: true
+description: A short excerpt for the Blog list.
+introduction: The opening paragraph beneath the title. This can be longer than the excerpt.
+# Uncomment these fields to add an optional full-width hero:
+# heroImage: ../../assets/blogimages/abendlicht/cover.jpg
+# heroImageAlt: Two birds flying towards the evening horizon
+# heroImagePosition: "50% 55%"
+# heroBackLinkColor: black # black or white; omit for automatic contrast
+# ogImage: ../../assets/blogimages/abendlicht/cover.jpg
+tags:
+  - everyday life
+lang: en
+---
+
+import PostImage from "@/components/PostImage.astro";
+import eveningPhoto from "../../assets/blogimages/abendlicht/cover.jpg";
+
+## A small observation
+
+<PostImage
+  src={eveningPhoto}
+  alt="Two birds flying towards an evening horizon"
+  align="right"
+  width="40%"
+  caption="An evening to remember."
+/>
+
+Start writing here. Text wraps around the photograph on larger screens. Change
+`align` to `left` or `center`, and adjust `width` to scale it. Use a percentage
+such as `40%`, or a pixel number such as `width={280}`. On a narrow screen the
+image automatically becomes full width above the text.
+
+To place a heading beside a photo too, add `wrapHeading` to the `PostImage`
+and put the heading immediately after it:
+
+```mdx
+<PostImage src={eveningPhoto} alt="Evening sky" align="right" width="40%" wrapHeading />
+
+## A heading beside the photo
+
+The paragraph continues beside the photo as well.
+```
+
+Keep writing in ordinary Markdown, including **emphasis**, lists, quotations
+and footnotes.[^1] The introduction, excerpt, tags, cover and body photographs
+are optional. Remove the example image and its imports if you only want text.
+
+## Another thought
+
+A new heading starts below any image from the previous section.
+
+[^1]: A little more context.
+
+To embed an existing published Photo, copy this example out of the code block:
+
+```mdx
+import PhotoFigure from "@/components/PhotoFigure.astro";
+
+<PhotoFigure id="abendlicht" caption="An evening to remember." />
+```

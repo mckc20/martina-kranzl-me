@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal blog built with Astro using the AstroPaper theme. The site is deployed on Vercel, using the `@astrojs/vercel` adapter and Vercel image service configured in `astro.config.ts`.
+Personal blog built with Astro using the AstroPaper theme. The site is deployed on Vercel, using the `@astrojs/vercel` adapter. Images are processed locally by Sharp and sanitised at build time; Vercel image service is disabled.
 
 ## Common Commands
 
@@ -20,29 +20,27 @@ npm run format           # Auto-format code with Prettier
 ## Architecture
 
 ### Content System
-- Blog posts live in `src/data/blog/` organized by date: `YYYY/MM/DD/slug.md`
+- Flat Photos and Blog content lives in `src/data/photos/*.{md,mdx}` and `src/data/blog/*.{md,mdx}`. See `docs/publishing.md`.
 - Content schema defined in `src/content.config.ts` using Zod validation
-- Posts require frontmatter with: `title`, `pubDatetime`, `description`, `tags`
-- Optional frontmatter: `featured`, `draft`, `modDatetime`, `ogImage`, `canonicalURL`
-- Draft posts (`draft: true`) are excluded from production builds
+- Blog requires title and pubDatetime; Photos requires image and pubDatetime. Draft defaults to true.
+- Optional metadata and examples are documented in `docs/publishing.md`; templates live outside content loaders.
+- Draft and future posts are excluded everywhere, including development. Publication timestamps alone determine ordering.
 
 ### Key Directories
 - `src/pages/` - File-based routing (Astro pages)
 - `src/components/` - Reusable Astro components
-- `src/layouts/` - Page layouts (`Layout.astro` is the base, `PostDetails.astro` for posts)
+- `src/layouts/` - Page layouts (`Layout.astro` is the base, `PhotoDetails.astro` and `BlogDetails.astro` for entries)
 - `src/utils/` - TypeScript utilities for post filtering, sorting, slug generation
 - `src/config.ts` - Site configuration (author, posts per page, feature toggles)
 - `src/constants.ts` - Social links and share links arrays
 
 ### Dynamic Routes
-- `/posts/[...slug]/` - Individual blog posts (generated from content collection)
-- `/posts/[...page]/` - Paginated post listings
+- `/photos/[slug]/` and `/blog/[slug]/` - Canonical entries; dated `/posts/` URLs permanently redirect
+- `/photos/page/[page]/` and `/blog/page/[page]/` - Paginated listings
 - `/tags/[tag]/[...page]/` - Posts filtered by tag
 
 ### OG Image Generation
-- Dynamic OG images generated at build time via `src/pages/posts/[...slug]/index.png.ts`
-- Uses Satori for SVG rendering and Resvg for PNG conversion
-- Templates in `src/utils/og-templates/`
+- Social images are generated locally with Sharp at `/photos/[slug]/index.png`, `/blog/[slug]/index.png` and `/og.png`; old dated endpoints redirect. No remote font requests during builds.
 
 ### Code Highlighting
 Shiki with custom transformers supporting:

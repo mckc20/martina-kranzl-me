@@ -1,0 +1,35 @@
+---
+image: "@/assets/photos/photo-001/main.jpg"
+pubDatetime: 2026-11-15T16:30:00+01:00
+draft: true
+title: Evening by the river
+alt: A bird silhouetted against a pink sky over the river
+caption: The last light on the water.
+tags:
+  - water
+  - evening
+dateTaken: "2026-11-14"
+location: Vienna
+camera:
+  make: Example
+  model: Camera
+  lens: 50 mm
+  focalLengthMm: 50
+  aperture: 2.8
+  exposureSeconds: 0.004
+  iso: 200
+lang: en
+---
+
+A few notes about this moment. Every field except `image` and `pubDatetime`
+is optional; keep `draft: true` until ready to publish.
+
+{/* Use @/assets/... or a path relative to this MDX file, never src/assets/.... */}
+
+import { Image } from "astro:assets";
+import anotherImage from "@/assets/photos/photo-001/another.jpg";
+
+<figure>
+  <Image src={anotherImage} alt="A second view of the river" />
+  <figcaption>A different perspective.</figcaption>
+</figure>
