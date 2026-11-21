@@ -1,0 +1,324 @@
+{
+  "redirects": [
+    {
+      "source": "/posts/2024/06/28/geburtstagsgeschenk-fuer-papa",
+      "destination": "/photos/geburtstagsgeschenk-fuer-papa/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/06/28/geburtstagsgeschenk-fuer-papa/index.png",
+      "destination": "/photos/geburtstagsgeschenk-fuer-papa/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/20/hagebutte",
+      "destination": "/photos/hagebutte/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/20/hagebutte/index.png",
+      "destination": "/photos/hagebutte/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/20/sonnenuntergang-im-weingarten",
+      "destination": "/photos/sonnenuntergang-im-weingarten/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/20/sonnenuntergang-im-weingarten/index.png",
+      "destination": "/photos/sonnenuntergang-im-weingarten/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/29/la-vie-en-rose",
+      "destination": "/photos/la-vie-en-rose/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/29/la-vie-en-rose/index.png",
+      "destination": "/photos/la-vie-en-rose/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/29/ringelspiel",
+      "destination": "/photos/ringelspiel/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/10/29/ringelspiel/index.png",
+      "destination": "/photos/ringelspiel/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/12/24/lucky",
+      "destination": "/photos/lucky/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/12/24/lucky/index.png",
+      "destination": "/photos/lucky/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/12/24/weihnachtsbaum",
+      "destination": "/photos/weihnachtsbaum/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2024/12/24/weihnachtsbaum/index.png",
+      "destination": "/photos/weihnachtsbaum/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/01/02/sonnenuntergang-aus-dem-flugzeug",
+      "destination": "/photos/sonnenuntergang-aus-dem-flugzeug/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/01/02/sonnenuntergang-aus-dem-flugzeug/index.png",
+      "destination": "/photos/sonnenuntergang-aus-dem-flugzeug/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/01/14/sonnenaufgang-in-wien",
+      "destination": "/photos/sonnenaufgang-in-wien/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/01/14/sonnenaufgang-in-wien/index.png",
+      "destination": "/photos/sonnenaufgang-in-wien/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/02/01/frost-im-sonnenschein",
+      "destination": "/photos/frost-im-sonnenschein/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/02/01/frost-im-sonnenschein/index.png",
+      "destination": "/photos/frost-im-sonnenschein/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/abenddaemmerung-im-heiligenstaedter-park",
+      "destination": "/photos/abenddaemmerung-im-heiligenstaedter-park/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/abenddaemmerung-im-heiligenstaedter-park/index.png",
+      "destination": "/photos/abenddaemmerung-im-heiligenstaedter-park/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/ruhe-in-den-bergen",
+      "destination": "/photos/ruhe-in-den-bergen/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/ruhe-in-den-bergen/index.png",
+      "destination": "/photos/ruhe-in-den-bergen/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/sonnenuntergang-ueber-den-huegeln",
+      "destination": "/photos/sonnenuntergang-ueber-den-huegeln/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2025/03/01/sonnenuntergang-ueber-den-huegeln/index.png",
+      "destination": "/photos/sonnenuntergang-ueber-den-huegeln/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/abendlicht",
+      "destination": "/photos/abendlicht/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/abendlicht/index.png",
+      "destination": "/photos/abendlicht/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/alles-im-blick",
+      "destination": "/photos/alles-im-blick/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/alles-im-blick/index.png",
+      "destination": "/photos/alles-im-blick/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/black-and-white",
+      "destination": "/photos/black-and-white/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/black-and-white/index.png",
+      "destination": "/photos/black-and-white/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/feuertulpen",
+      "destination": "/photos/feuertulpen/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/feuertulpen/index.png",
+      "destination": "/photos/feuertulpen/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/fields-of-gold",
+      "destination": "/photos/fields-of-gold/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/fields-of-gold/index.png",
+      "destination": "/photos/fields-of-gold/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/love-shine-a-light",
+      "destination": "/photos/love-shine-a-light/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/love-shine-a-light/index.png",
+      "destination": "/photos/love-shine-a-light/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/mediterranischer-himmel",
+      "destination": "/photos/mediterranischer-himmel/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/mediterranischer-himmel/index.png",
+      "destination": "/photos/mediterranischer-himmel/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/orion",
+      "destination": "/blog/himmelsjaeger/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/orion/index.png",
+      "destination": "/blog/himmelsjaeger/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/riders-on-the-storm",
+      "destination": "/photos/riders-on-the-storm/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/riders-on-the-storm/index.png",
+      "destination": "/photos/riders-on-the-storm/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/ring-of-fire",
+      "destination": "/photos/ring-of-fire/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/04/26/ring-of-fire/index.png",
+      "destination": "/photos/ring-of-fire/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/06/birke",
+      "destination": "/photos/birke/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/06/birke/index.png",
+      "destination": "/photos/birke/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/06/blaetterregen",
+      "destination": "/photos/blaetterregen/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/06/blaetterregen/index.png",
+      "destination": "/photos/blaetterregen/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/12/the-dark-side",
+      "destination": "/photos/the-dark-side/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/12/the-dark-side/index.png",
+      "destination": "/photos/the-dark-side/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/30/abschreckungskunst",
+      "destination": "/photos/abschreckungskunst/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/30/abschreckungskunst/index.png",
+      "destination": "/photos/abschreckungskunst/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/30/ghost",
+      "destination": "/photos/ghost/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/05/30/ghost/index.png",
+      "destination": "/photos/ghost/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/07/23/krone-aus-sternen",
+      "destination": "/photos/krone-aus-sternen/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/07/23/krone-aus-sternen/index.png",
+      "destination": "/photos/krone-aus-sternen/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/07/24/engel",
+      "destination": "/photos/engel/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/07/24/engel/index.png",
+      "destination": "/photos/engel/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/10/16/im-geäst",
+      "destination": "/photos/im-geast/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2026/10/16/im-geäst/index.png",
+      "destination": "/photos/im-geast/index.png",
+      "permanent": true
+    },
+    {
+      "source": "/posts",
+      "destination": "/archives/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/2",
+      "destination": "/archives/",
+      "permanent": true
+    }
+  ]
+}

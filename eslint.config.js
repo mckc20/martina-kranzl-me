@@ -14,5 +14,23 @@ export default [
     },
   },
   { rules: { "no-console": "error" } },
-  { ignores: ["dist/**", ".astro", "public/pagefind/**"] },
+  // CLI generators intentionally report progress; keep the vendor analytics snippet intact.
+  { files: ["scripts/*.mjs"], rules: { "no-console": "off" } },
+  {
+    files: ["src/components/PostHogWebSnippet.astro"],
+    rules: {
+      "@typescript-eslint/no-unused-expressions": "off",
+      "no-var": "off",
+      "prefer-rest-params": "off",
+    },
+  },
+  {
+    ignores: [
+      "dist/**",
+      ".astro",
+      ".vercel/**",
+      ".netlify/**",
+      "public/pagefind/**",
+    ],
+  },
 ];

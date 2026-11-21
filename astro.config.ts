@@ -12,6 +12,9 @@ import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
 
 import vercel from "@astrojs/vercel";
+import migration from "./src/data/migration-map.json";
+import sanitisedImages from "./src/utils/sanitiseImages";
+import contentImportsHmr from "./src/utils/contentImportsHmr";
 
 import remarkGfm from "remark-gfm";
 
@@ -20,12 +23,26 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
+  redirects: {
+    ...Object.fromEntries(
+      migration.flatMap(item => [
+        [item.oldUrl, { status: 308, destination: item.destination }],
+        [
+          item.oldSocialImage,
+          { status: 308, destination: `${item.destination}index.png` },
+        ],
+      ])
+    ),
+    "/posts": { status: 308, destination: "/archives/" },
+    "/posts/2": { status: 308, destination: "/archives/" },
+  },
 
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
     mdx(),
+    sanitisedImages(),
   ],
 
   markdown: {
@@ -53,13 +70,14 @@ export default defineConfig({
     // @ts-ignore
     // This will be fixed in Astro 6 with Vite 7 support
     // See: https://github.com/withastro/astro/issues/14030
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), contentImportsHmr()],
     optimizeDeps: {
       exclude: ["@resvg/resvg-js"],
     },
   },
 
   image: {
+    service: { entrypoint: "astro/assets/services/sharp" },
     responsiveStyles: true,
     layout: "constrained",
   },
@@ -74,10 +92,5 @@ export default defineConfig({
     },
   },
 
-  adapter: vercel({
-    imageService: true,
-    imagesConfig: {
-      sizes: [24, 320, 640, 720, 750, 828, 960, 1080, 1200, 1920, 2048, 3840],
-    },
-  }),
+  adapter: vercel({ imageService: false }),
 });
